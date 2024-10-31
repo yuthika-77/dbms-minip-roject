@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airline Reservation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .search-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: left;
+        }
+        .search-box input, .search-box select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-box button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .search-box button:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Airline Reservation</h1>
+    </div>
+    <div class="container">
+        <div class="search-box">
+            <h2>Book a Flight</h2>
+            <form action="flight-results.html" method="get">
+                <label for="from">From:</label>
+                <input type="text" id="from" name="from" placeholder="City or Airport" required>
+
+                <label for="to">To:</label>
+                <input type="text" id="to" name="to" placeholder="City or Airport" required>
+
+                <label for="departure">Departure Date:</label>
+                <input type="date" id="departure" name="departure" required>
+
+                <label for="return">Return Date:</label>
+                <input type="date" id="return" name="return">
+
+                <label for="passengers">Passengers:</label>
+                <select id="passengers" name="passengers" required>
+                    <option value="1">1 Passenger</option>
+                    <option value="2">2 Passengers</option>
+                    <option value="3">3 Passengers</option>
+                    <option value="4">4 Passengers</option>
+                </select>
+
+                <label for="class">Class:</label>
+                <select id="class" name="class" required>
+                    <option value="economy">Economy</option>
+                    <option value="business">Business</option>
+                    <option value="first">First Class</option>
+                </select>
+
+                <button type="submit">Search Flights</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Airline Reservation. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+</body>
+</html>
+
+<html>
+    <head>
+        <title>Flights</title>
+    </head>
+    <body>
+        <form action ="Booking.html" method="POST">
+            <div class="booking">
+                <div>
+                    
+                </div>
+            </div>>
+        </form>
+    </body>
+</html>

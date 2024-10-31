@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Entry Form</title>
+</head>
+<body>
+
+<h2>Flight Entry Form</h2>
+<form action="NewFlight.php" method="post">
+    <label for="trip_type">Trip Type:</label>
+    <select id="trip_type" name="trip_type" required>
+        <option value="oneway">One Way</option>
+        <option value="roundtrip">Round Trip</option>
+    </select><br><br>
+
+    <label for="f_no">Flight Number:</label>
+    <input type="text" id="f_no" name="f_no" required><br><br>
+
+    <label for="arrival_date">Arrival Date:</label>
+    <input type="date" id="arrival_date" name="arrival_date" required><br><br>
+
+    <label for="departure_date">Departure Date:</label>
+    <input type="date" id="departure_date" name="departure_date" required><br><br>
+
+    <label for="from_location">From Location:</label>
+    <input type="text" id="from_location" name="from_location" required><br><br>
+
+    <label for="to_location">To Location:</label>
+    <input type="text" id="to_location" name="to_location" required><br><br>
+
+    <label for="arrival_time">Arrival Time:</label>
+    <input type="time" id="arrival_time" name="arrival_time" required><br><br>
+
+    <label for="ReturnDate">Return Date:</label>
+    <input type="time"   name="return" ><br><br>
+
+    <label for="departure_time">Departure Time:</label>
+    <input type="time" id="departure_time" name="departure_time" required><br><br>
+
+    <button type="submit" name="submit" >Add Flight</button>
+</form>
+
+</body>
+</html>

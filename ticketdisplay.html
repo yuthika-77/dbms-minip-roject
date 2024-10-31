@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .ticket {
+            background-color: white;
+            width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: left;
+        }
+        .ticket-header {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+        .ticket-info {
+            margin-bottom: 15px;
+        }
+        .ticket-info strong {
+            display: block;
+            font-size: 14px;
+            color: #555;
+        }
+        .ticket-info span {
+            font-size: 16px;
+            color: #333;
+        }
+        .barcode {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .barcode img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <div class="ticket-header">
+            Airline Reservation
+        </div>
+        <div class="ticket-info">
+            <strong>Passenger:</strong>
+            <span>John Doe</span>
+        </div>
+        <div class="ticket-info">
+            <strong>Flight Number:</strong>
+            <span>AB1234</span>
+        </div>
+        <div class="ticket-info">
+            <strong>Departure:</strong>
+            <span>New York (JFK) - 10:00 AM</span>
+        </div>
+        <div class="ticket-info">
+            <strong>Arrival:</strong>
+            <span>Los Angeles (LAX) - 1:00 PM</span>
+        </div>
+        <div class="ticket-info">
+            <strong>Seat Number:</strong>
+            <span>12A</span>
+        </div>
+        <div class="ticket-info">
+            <strong>Gate:</strong>
+            <span>C4</span>
+        </div>
+        <div class="barcode">
+            <img src="barcode.png" alt="Barcode">
+        </div>
+    </div>
+</body>
+</html>

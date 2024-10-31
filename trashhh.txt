@@ -1,0 +1,50 @@
+<?php
+
+require_once( "connection.php");
+
+
+
+if(isset($_POST['submit']))
+{
+        $TripType=$_POST['trip-type'];
+        $From=$_POST['from'];
+        $To=$_POST['to'];
+        $DepartureDate=$_POST['departure'];
+        $ReturnDate=$_POST['return'];
+        $Passengers=$_POST['passengers'];
+        $Class=$_POST['class'];
+
+        $check_query = "SELECT * FROM flight WHERE Trip_type='$TripType' AND Departure_date='$DepartureDate' AND To_location='$To' AND From_location='$From'";
+        $result = mysqli_query($con,$check_query);
+
+        if($result)
+        {
+           
+            $row=mysqli_fetch_array($result);
+            $Fid=$row['F_id'];
+            $get_query= "SELECT Arrival_time,Departure_time from flight where  F_id='$Fid'";
+            $getres=mysqli_query($con,$get_query);
+            $getrow=mysqli_fetch_array($getres);
+            $DepatureTime=$row['$getrow'];
+            $ArrivalTime=$row['$getrow'];
+            echo '<div class=""flights-available>
+                <div class="details">
+                    <p><strong>Flights Available</strong></p>
+                    <p>'.$From .':</p>
+                    <p>'.$DepartureTime.':</p>
+                    <p>'.$To .':</p>
+                    
+                    <p>'.$ArrivalTime .':</p>
+                </div>
+            </div>';
+        }
+        else
+        {
+            echo 'hello</div>';
+        }
+}
+else
+{
+    echo "form not submitted";
+}
+?>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Login</title>
+    <link rel="stylesheet" type="text/css" href="Signup.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Passenger Login</h1>
+    </div>
+    <div class="container">
+        <div class="login-box">
+            <form action="insert.php" method="post">
+                <label for = "Fname ">Firstname</label>
+                <input type="text" name="fname">
+                <label for = "Lname">Lastname</label>
+                <input type="text" name="lname">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+           
+                <label for = "phone" >Phhone Number</label>
+                <input type="text" name="phone">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Airline Reservation. All Rights Reserved.</p>
+    </div>
+</body>
+</html>
