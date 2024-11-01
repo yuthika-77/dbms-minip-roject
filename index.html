@@ -32,8 +32,8 @@
             <h2>Admin Login</h2>
             <form action="login.php" method="post">
                 <input type="hidden" name="loginType" value="admin">
-                <label for="adminusername" style="color: #fff;">Admin Email:</label>
-                <input type="text" id="adminusername" name="username" placeholder="Enter username" required>
+                <label for="adminname" style="color: #fff;">Admin Email:</label>
+                <input type="text" id="adminusername" name="username" placeholder="Enter admin username" required>
                 <label for="adminPassword" style="color: #fff;">Password:</label>
                 <input type="password" id="adminPassword" name="password" placeholder="Enter password" required>
                 <button type="submit" value="submit">Login</button>
@@ -41,13 +41,20 @@
                 <br/><br/> <a onclick="backToPrompt()">Back</a>
             </form>
         </div>
-
-        <!-- User Options -->
-        <div class="user-options" id="user">
-            <h3>User Options</h3>
-            <!-- Add user options or content here -->
-            <p>This section can include user-specific features.</p>
+        <div id="userLogin" class="login-box">
+            <h2>User Login</h2>
+            <form action="login.php" method="post">
+                <input type="hidden" name="loginType" value="admin">
+                <label for="username" style="color: #fff;">Admin Email:</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required>
+                <label for="adminPassword" style="color: #fff;">Password:</label>
+                <input type="password" id="userPassword" name="password" placeholder="Enter password" required>
+                <button type="submit" value="submit">Login</button>
+                <button type="reset" value="reset">Cancel</button>
+                <br/><br/> <a onclick="backToPrompt()">Back</a>
+            </form>
         </div>
+
     </div>
 
     <script>
@@ -55,22 +62,23 @@
         function showLoginForm(type) {
             const promptBox = document.getElementById("promptBox");
             const adminLogin = document.getElementById("adminLogin");
-            const user = document.getElementById("user");
+            const userLogin = document.getElementById("userLogin");
             promptBox.classList.remove("active");
 
             if (type === "admin") {
-                if (confirm("Are you sure to head to admin?")) {
+                if (confirm("Are you sure you are an  admin?")) {
                     alert("Redirecting to admin page.....");
                     adminLogin.classList.add("active");
-                    user.classList.remove("active");
+                    userLogin.classList.remove("active");
                 } else {
                     promptBox.classList.add("active");
                 }
             } else if (type === "user") {
-                if (confirm("Are you sure to head to user?")) {
-                    adminLogin.classList.remove("active");
+                if (confirm("Are you sure you are a user?")) 
+            {
                     alert("Redirecting to user page.....");
-                    window.location.href = 'user.html';
+                    adminLogin.classList.remove("active");
+                    userLogin.classList.add("active");
                 } else {
                     promptBox.classList.add("active");
                 }
@@ -81,11 +89,11 @@
         function backToPrompt() {
             const promptBox = document.getElementById("promptBox");
             const adminLogin = document.getElementById("adminLogin");
-            const user = document.getElementById("user");
+            const userLogin = document.getElementById("userLogin");
 
             promptBox.classList.add("active");
             adminLogin.classList.remove("active");
-            user.classList.remove("active");
+            userLogin.classList.remove("active");
         }
     </script>
 </body>
