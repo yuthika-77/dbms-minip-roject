@@ -1,0 +1,167 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoOn Airline - Home</title>
+    <link rel="stylesheet" href="styles.css">
+<style>
+.exclusive-offers {
+    margin: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.offer-boxes {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.offer-box {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.offer-box:hover {
+    transform: scale(1.05);
+}
+
+.offer-box h4 {
+    color: #0073e6;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to GoOn Airline</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="flights.html">Book Flights</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<div class="hero">
+    <img src="https://example.com/hero-image.jpg" alt="Airplane flying over a scenic view">
+    <div class="hero-content">
+        <h2>Your Journey Starts Here</h2>
+        <p>Explore amazing destinations with unbeatable fares!</p>
+    </div>
+</div>
+
+<div class="search-box">
+    <h3>Search Flights</h3>
+    <form action="search-results.html" method="get">
+        <input type="text" name="from" placeholder="From" required>
+        <input type="text" name="to" placeholder="To" required>
+        <input type="date" name="departure" required>
+        <input type="date" name="return" required>
+        <input type="number" name="passengers" placeholder="Passengers" required min="1" max="10">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<section class="exclusive-offers">
+    <h3>Exclusive Offers</h3>
+    <p>Take advantage of our special promotions and discounts to make your travel experience even more enjoyable!</p>
+    <div class="offer-boxes">
+        <div class="offer-box">
+            <h4>50% Off on Round Trips</h4>
+            <p>Book your round-trip flight and enjoy a massive 50% discount. Valid for travel between January and March.</p>
+            <p><strong>Promo Code:</strong> ROUNDFIFTY</p>
+            <button onclick="alert('Offer applied!');">Book Now</button>
+        </div>
+        <div class="offer-box">
+            <h4>Kids Fly Free</h4>
+            <p>Children under 12 fly free when accompanied by an adult. Plan your family vacation today!</p>
+            <p><strong>Conditions apply.</strong></p>
+            <button onclick="alert('Offer applied!');">Book Now</button>
+        </div>
+        <div class="offer-box">
+            <h4>Last Minute Deals</h4>
+            <p>Get up to 30% off on flights booked within 48 hours of departure. Perfect for spontaneous travelers!</p>
+            <p><strong>Check availability.</strong></p>
+            <button onclick="alert('Offer applied!');">Book Now</button>
+        </div>
+    </div>
+</section>
+
+<section class="latest-news">
+    <h3>Latest News</h3>
+    <div class="news-item">
+        <h4>New Routes Announced!</h4>
+        <p>We're excited to announce new routes to several popular destinations starting next month!</p>
+    </div>
+    <div class="news-item">
+        <h4>Safety Protocols Update</h4>
+        <p>Your safety is our top priority. Read about our latest safety protocols and measures.</p>
+    </div>
+    <div class="news-item">
+        <h4>Exclusive Deals This Month</h4>
+        <p>Check out our special offers this month on international flights!</p>
+    </div>
+</section>
+
+<section class="customer-reviews">
+    <h3>Customer Reviews</h3>
+    <div class="review-item">
+        <p>"Amazing experience! The booking was easy and the staff were very helpful!"</p>
+        <strong>- Sarah J.</strong>
+    </div>
+    <div class="review-item">
+        <p>"I loved the onboard service! Will definitely fly with GoOn Airline again."</p>
+        <strong>- Michael T.</strong>
+    </div>
+    <div class="review-item">
+        <p>"Great prices and amazing destinations. Highly recommend!"</p>
+        <strong>- Jessica L.</strong>
+    </div>
+</section>
+
+<section class="famous-destinations">
+    <h3>Famous Destinations</h3>
+    <div class="destination-images">
+        <div class="destination">
+            <img src="https://example.com/destination1.jpg" alt="Paris, France">
+            <p>Paris, France</p>
+        </div>
+        <div class="destination">
+            <img src="https://example.com/destination2.jpg" alt="Bali, Indonesia">
+            <p>Bali, Indonesia</p>
+        </div>
+        <div class="destination">
+            <img src="https://example.com/destination3.jpg" alt="New York City, USA">
+            <p>New York City, USA</p>
+        </div>
+        <div class="destination">
+            <img src="https://example.com/destination4.jpg" alt="Tokyo, Japan">
+            <p>Tokyo, Japan</p>
+        </div>
+        <div class="destination">
+            <img src="https://example.com/destination5.jpg" alt="Sydney, Australia">
+            <p>Sydney, Australia</p>
+        </div>
+        <div class="destination">
+            <img src="https://example.com/destination6.jpg" alt="Cape Town, South Africa">
+            <p>Cape Town, South Africa</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2024 GoOn Airline. All Rights Reserved.</p>
+    <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms of Service</a>
+    </div>
+</footer>
+
+</body>
