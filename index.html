@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoOnAirline-Login</title>
     <link rel="stylesheet" href="styles.css" type="text/css">
-    <style>
-       
-    </style>
 </head>
 
 <body>
@@ -30,25 +27,27 @@
         <!-- Admin Login Form -->
         <div id="adminLogin" class="login-box">
             <h2>Admin Login</h2>
-            <form action="login.php" method="post">
+            <form onsubmit="return login()" method="post">
                 <input type="hidden" name="loginType" value="admin">
-                <input type="text" id="adminusername" name="username" placeholder="Admin username" required>
-                <input type="password" id="adminPassword" name="password" placeholder="Enter password" required>
+                <input type="text" id="ausername" name="ausername" placeholder="Admin username" required>
+                <input type="password" id="apassword" name="apassword" placeholder="Enter password" required>
                 <button type="submit" value="submit">Login</button>
                 <button type="reset" value="reset">Cancel</button>
-                <br/><br/> <a onclick="backToPrompt()">Back</a>
+                <br /><br /> <a onclick="backToPrompt()">Back</a>
             </form>
         </div>
+
+        <!-- User Login Form -->
         <div id="userLogin" class="login-box">
             <h2>User Login</h2>
             <form action="login.php" method="post">
-                <input type="hidden" name="loginType" value="admin">
+                <input type="hidden" name="loginType" value="user">
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
                 <input type="password" id="userPassword" name="password" placeholder="Enter password" required>
                 <button type="submit" value="submit">Login</button>
                 <button type="reset" value="reset">Cancel</button>
-                <br/><br/> <a href="Signup.html">New User?Click here</a>
-                <br/><br/> <a onclick="backToPrompt()">Back</a>
+                <br /><br /> <a href="Signup.html">New User? Click here</a>
+                <br /><br /> <a onclick="backToPrompt()">Back</a>
             </form>
         </div>
 
@@ -60,25 +59,15 @@
             const promptBox = document.getElementById("promptBox");
             const adminLogin = document.getElementById("adminLogin");
             const userLogin = document.getElementById("userLogin");
+
             promptBox.classList.remove("active");
 
             if (type === "admin") {
-                if (confirm("Are you sure you are an  admin?")) {
-                    alert("Redirecting to admin page.....");
-                    adminLogin.classList.add("active");
-                    userLogin.classList.remove("active");
-                } else {
-                    promptBox.classList.add("active");
-                }
+                adminLogin.classList.add("active");
+                userLogin.classList.remove("active");
             } else if (type === "user") {
-                if (confirm("Are you sure you are a user?")) 
-            {
-                    alert("Redirecting to user page.....");
-                    adminLogin.classList.remove("active");
-                    userLogin.classList.add("active");
-                } else {
-                    promptBox.classList.add("active");
-                }
+                adminLogin.classList.remove("active");
+                userLogin.classList.add("active");
             }
         }
 
@@ -92,9 +81,36 @@
             adminLogin.classList.remove("active");
             userLogin.classList.remove("active");
         }
+
+        // Static login credentials for admin
+        const staticUsername = "admin";
+        const staticPassword = "password123";
+
+        function login() {
+            const username = document.getElementById('ausername').value;
+            const password = document.getElementById('apassword').value;
+            const adminLogin = document.getElementById("adminLogin");
+
+            if (username === staticUsername && password === staticPassword) {
+                window.location.href = "admin.html"; // Redirect to the admin page
+                return false; // Prevent default form submission
+            } else {
+                alert("Invalid username or password.");
+                const username = document.getElementById('ausername');
+                const password = document.getElementById('apassword')
+
+                username.value = "";
+                password.value = "";
+                adminLogin.classList.add("active");
+                document.getElementById("promptBox").classList.remove("active");
+                return false; // Prevent default form submission
+            }
+        }
     </script>
 </body>
+
 <footer>
     <p>2024 Airline Reservation. All Rights Reserved.</p>
 </footer>
+
 </html>
