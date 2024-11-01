@@ -3,34 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passenger Login</title>
-    <link rel="stylesheet" type="text/css" href="Signup.css">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <title>GoOnAirline - Signup</title>
+    <style>
+
+        
+
+    </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Passenger Login</h1>
-    </div>
-    <div class="container">
-        <div class="login-box">
-            <form action="insert.php" method="post">
-                <label for = "Fname ">Firstname</label>
-                <input type="text" name="fname">
-                <label for = "Lname">Lastname</label>
-                <input type="text" name="lname">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-           
-                <label for = "phone" >Phhone Number</label>
-                <input type="text" name="phone">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-
-                <button type="submit">Login</button>
+    <header>
+        <h1>GoOn Airline</h1>
+        <p style="font-weight:bold;">The best journey starts with us...</p>
+    </header>
+    <div class="box">
+            <h2>Sign Up Here</h2>
+            <form action="insert.php" method="post" onsubmit="return validate()">
+                <input type="text" id="fname" name="fname" placeholder="Enter first name" required>
+                <input type="text" id="lname" name="lname" placeholder="Enter last name" required>
+                <input type="text" id="age" name="age" placeholder="Enter age(in years)" required>
+                <select name="Gender">
+                    <option value="none">---Select Gender-----</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Others">Others</option>
+                </select>
+                <input type="email" id="email" name="email" placeholder="Enter email" required>
+                <input type="text" name="phone" id="phone" placeholder="Enter phone number" required>
+                <input type="text" id="uname" name="uname" placeholder="Enter username" required>
+                <input type="password" id="pass" name="pass" placeholder="Enter password" required>
+                <input type="password" id="pass1" name="pass1" placeholder="Re-enter password" required>
+                
+                <button type="submit">Sign Up</button>
+                <button type="reset">Cancel</button>
+                <br><br>
+                <a href="index.html">Back to Login</a>
             </form>
-        </div>
     </div>
-    <div class="footer">
-        <p>&copy; 2024 Airline Reservation. All Rights Reserved.</p>
-    </div>
+    <footer>
+        <p>2024 Airline Reservation. All Rights Reserved.</p>
+    </footer>
+
+<script type="text/javascript">
+        
+function validate() {
+
+    var fnm = document.getElementById("fname").value.trim();
+    var nameRegex = /^[a-zA-Z\s]+$/;  // Allows only letters and spaces
+    if (nm == "" || !nameRegex.test(nm) || nm.length > 25 || nm.length < 2) {
+        alert("Please Enter a valid name with only letters and spaces, between 2-25 characters.");
+        return false;
+    }
+    var lnm = document.getElementById("lname").value.trim();
+    var nameRegex = /^[a-zA-Z\s]+$/;  // Allows only letters and spaces
+    if (nm == "" || !nameRegex.test(nm) || nm.length > 25 || nm.length < 2) {
+        alert("Please Enter a valid name with only letters and spaces, between 2-25 characters.");
+        return false;
+    }
+    var age = document.getElementById("age");
+    if (age.value == "") {
+        alert("Please enter your age");
+        return false;
+    }
+    if (isNaN(age.value) || age.value.length < 2||age.value<12 || age.value>99 ) {
+        alert("Age must be a number between 12 and 99");
+        age.focus();
+        return false;
+    }
+    var gender = document.getElementsByName("Gender")[0];
+    if (gender.value == "none") {
+        alert("Please select your gender");
+        return false;
+    }
+    var uname = document.getElementById("username").value.trim();
+    var usernameRegex = /^[a-zA-Z0-9]+$/;  // Allows only letters and numbers
+    if (uname == "" || !usernameRegex.test(uname) || uname.length > 15 || uname.length < 2) {
+        alert("Please enter a valid username with only letters and numbers, between 2-15 characters.");
+        return false;
+    }
+ var gender = document.getElementsByName("Gender")[0];
+    if (gender.value == "none") {
+        alert("Please select your gender");
+        return false;
+    }
+   
+
+    var pass = document.getElementById("password");
+    var pass1 = document.getElementById("password1")
+    if (pass.value == "") {
+        alert("Please enter your password");
+        return false;
+    }
+    if (pass.value !== pass1.value) {
+        alert("Passwords do not match");
+        return false;
+    }
+
+   
+
+    var ph = document.getElementById("phone");
+    if (ph.value == "") {
+        alert("Please enter your mobile no.");
+        return false;
+    }
+    if (isNaN(ph.value) || ph.value.length != 10) {
+        alert("mobile number must have 10 digits");
+        ph.focus();
+        return false;
+    }
+
+
+}
+
+</script>
+    </script>
 </body>
 </html>

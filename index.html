@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoOnAirline</title>
+    <title>GoOnAirline-Login</title>
     <link rel="stylesheet" href="styles.css" type="text/css">
     <style>
        
@@ -32,9 +32,7 @@
             <h2>Admin Login</h2>
             <form action="login.php" method="post">
                 <input type="hidden" name="loginType" value="admin">
-                <label for="adminname" style="color: #fff;">Admin Email:</label>
-                <input type="text" id="adminusername" name="username" placeholder="Enter admin username" required>
-                <label for="adminPassword" style="color: #fff;">Password:</label>
+                <input type="text" id="adminusername" name="username" placeholder="Admin username" required>
                 <input type="password" id="adminPassword" name="password" placeholder="Enter password" required>
                 <button type="submit" value="submit">Login</button>
                 <button type="reset" value="reset">Cancel</button>
@@ -45,13 +43,11 @@
             <h2>User Login</h2>
             <form action="login.php" method="post">
                 <input type="hidden" name="loginType" value="admin">
-                <label for="username" style="color: #fff;">Admin Email:</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
-                <label for="adminPassword" style="color: #fff;">Password:</label>
                 <input type="password" id="userPassword" name="password" placeholder="Enter password" required>
                 <button type="submit" value="submit">Login</button>
                 <button type="reset" value="reset">Cancel</button>
-                <br/><br/> <a onclick="signup.html">New User?Click here</a>
+                <br/><br/> <a href="Signup.html">New User?Click here</a>
                 <br/><br/> <a onclick="backToPrompt()">Back</a>
             </form>
         </div>
