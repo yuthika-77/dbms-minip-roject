@@ -210,7 +210,19 @@ setInterval(() => {
 
 // Initialize the first slide
 showSlide(currentSlide);
+showSlide(currentSlide);
+function getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
+        // Set the minimum date for both date inputs
+        const minDate = getTodayDate();
+        document.getElementById('departure').setAttribute('min', minDate);
+        document.getElementById('return').setAttribute('min', minDate);
     </script>
 </body>
 </html>
