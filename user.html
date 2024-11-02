@@ -6,64 +6,7 @@
     <link rel="stylesheet" href="styles.css" type="text/css">
     <title>GoOn Airline - Services</title>
     <style>
-        .news-section {
-            background-color: #e7f3ff; /* Light blue background for news section */
-            padding: 20px;
-            margin: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .news-item {
-            margin-bottom: 15px;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            padding: 10px 0;
-            background-color: black;
-        }
-
-            nav a {
-                color: white;
-                font-weight:bolder;
-                padding: 10px 20px;
-                text-decoration: none;
-                margin: 0 5px;
-                border-radius: 5px;
-                transition: background-color 0.3s;
-            }
-
-                nav a:hover {
-                    background-color: #00aaff;
-                }
-
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: auto; /* Centering the modal */
-            padding: 20px;
-            width: 50%; /* Half the width of the screen */
-            height: 80%; /* 80% height for a more compact look */
-            overflow: auto; /* Scroll if needed */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 8px; /* Slightly rounded corners */
-        }
+       
 
         .close {
             color: #aaa;
@@ -121,22 +64,31 @@
         </nav>
     </header>
 
-    <!-- Latest News Section -->
     <section class="news-section">
         <h2>Latest News</h2>
-        <div class="news-item">
-            <h3>New Routes Launched!</h3>
-            <p>We're excited to announce new flight routes from New York to Los Angeles starting next month!</p>
+        <div class="carousel">
+            <div class="news-item" style="background-image: url('1.jpg');">
+                <div class="overlay">
+                    <h3>New Routes Launched!</h3>
+                    <p>We're excited to announce new flight routes from New York to Los Angeles starting next month!</p>
+                </div>
+            </div>
+            <div class="news-item" style="background-image: url('image2.jpg');">
+                <div class="overlay">
+                    <h3>Special Discounts Available</h3>
+                    <p>Book now and get up to 30% off on your next flight with us! Offer ends soon.</p>
+                </div>
+            </div>
+            <div class="news-item" style="background-image: url('image3.jpg');">
+                <div class="overlay">
+                    <h3>Safety Measures in Place</h3>
+                    <p>Your safety is our top priority. Learn about the new health measures we've implemented.</p>
+                </div>
+            </div>
         </div>
-        <div class="news-item">
-            <h3>Special Discounts Available</h3>
-            <p>Book now and get up to 30% off on your next flight with us! Offer ends soon.</p>
-        </div>
-        <div class="news-item">
-            <h3>Safety Measures in Place</h3>
-            <p>Your safety is our top priority. Learn about the new health measures we've implemented.</p>
-        </div>
-    </section>
+        <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
+        <button class="next" onclick="plusSlides(1)">&#10095;</button>
+    </section>    
 
     
 
@@ -146,11 +98,37 @@
             <span class="close" onclick="closeModal('bookFlightModal')">&times;</span>
             <h2>Book a Flight</h2>
             <form action="bookFlight.php" method="post">
-                <input type="text" name="from" placeholder="From" required>
-                <input type="text" name="to" placeholder="To" required>
-                <input type="date" name="departure" required>
-                <input type="number" name="passengers" placeholder="Number of Passengers" required min="1" max="10">
-                <button type="submit">Book Now</button>
+                <label for="from">From:</label>
+                <input type="text" id="from" name="from" placeholder="Departure City or Airport" required>
+
+                <br/><label for="to">To:</label>
+                <input type="text" id="to" name="to" placeholder="Arrival City or Airport" required>
+
+                <br/><label for="departure">Departure Date:</label>
+                <input type="date" id="departure" name="departure" required>
+
+                <br/><label for="return">Return Date:</label>
+                <input type="date" id="return" name="return">
+
+               <br/> <label for="passengers">Passengers:</label>
+                <select id="passengers" name="passengers" required min="1" max="5">
+                    <option value="" selected>Select No of Passangers</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select><br/><br/>
+
+                <label for="class">Class:</label>
+                <select id="class" name="class" required>
+                    <option value="" selected>Select Class</option>
+                    <option value="economy">Economy</option>
+                    <option value="business">Business</option>
+                    <option value="first">First Class</option>
+                </select><br/><br/>
+
+                <button type="submit">Search Flights</button>
             </form>
         </div>
     </div>
@@ -212,6 +190,27 @@
                 closeModal(event.target.id);
             }
         };
+        let currentSlide = 0;
+
+function showSlide(index) {
+    const slides = document.querySelectorAll(".carousel .news-item");
+    currentSlide = (index + slides.length) % slides.length;
+    const offset = -currentSlide * 100;
+    document.querySelector(".carousel").style.transform = `translateX(${offset}%)`;
+}
+
+function plusSlides(n) {
+    showSlide(currentSlide + n);
+}
+
+// Auto-slide function
+setInterval(() => {
+    plusSlides(1);
+}, 10000); // Changes slide every 5 seconds
+
+// Initialize the first slide
+showSlide(currentSlide);
+
     </script>
 </body>
 </html>
