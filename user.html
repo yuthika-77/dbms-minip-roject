@@ -98,6 +98,14 @@
             <span class="close" onclick="closeModal('bookFlightModal')">&times;</span>
             <h2>Book a Flight</h2>
             <form action="bookFlight.php" method="post">
+                <label for="trip-type" >Trip Type:</label><br>
+                <div>
+                    <label for="one-way">One-Way</label>
+                    <input type="radio" id="one-way" name="trip-type" value="oneway" checked>
+                    <label for="round-trip">Round-Trip</label>
+                    <input type="radio" id="round-trip" name="trip-type" value="roundtrip">
+                </div>
+
                 <label for="from">From:</label>
                 <input type="text" id="from" name="from" placeholder="Departure City or Airport" required>
 
@@ -106,10 +114,10 @@
 
                 <br/><label for="departure">Departure Date:</label>
                 <input type="date" id="departure" name="departure" required>
-
+                <div id="return-date-container" style="display: none;">
                 <br/><label for="return">Return Date:</label>
                 <input type="date" id="return" name="return">
-
+                </div>
                <br/> <label for="passengers">Passengers:</label>
                 <select id="passengers" name="passengers" required min="1" max="5">
                     <option value="" selected>Select No of Passangers</option>
@@ -210,7 +218,6 @@ setInterval(() => {
 
 // Initialize the first slide
 showSlide(currentSlide);
-showSlide(currentSlide);
 function getTodayDate() {
             const today = new Date();
             const year = today.getFullYear();
@@ -223,6 +230,11 @@ function getTodayDate() {
         const minDate = getTodayDate();
         document.getElementById('departure').setAttribute('min', minDate);
         document.getElementById('return').setAttribute('min', minDate);
+        document.querySelectorAll('input[name="trip-type"]').forEach(function (element) {
+            element.addEventListener('change', function () {
+                document.getElementById('return-date-container').style.display = this.id === 'round-trip' ? 'block' : 'none';
+            });
+        });
     </script>
 </body>
 </html>
