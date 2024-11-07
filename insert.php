@@ -6,12 +6,13 @@ if (isset($_POST['submit']))
     // Check if any required fields are empty
     if (empty($_POST['fname']) ||empty($_POST['lname']) || empty($_POST['email']) ||empty($_POST['username']) || empty($_POST['age']) || empty($_POST['gender']) || empty($_POST['phone']) || empty($_POST['password']) || empty($_POST['password1'])) 
     {
-        echo '<script>alert("Please fill in all the fields.");
+        echo '<script>alert("Please fill in all the fields.")';
     } 
     else 
     {
-        // Collect form data
-        $UserName = $_POST['name'];
+         
+        $UserFirst = $_POST['fname'];
+        $UserLast = $_POST['lname'];
         $UserUsername = $_POST['username'];
         $UserAge = $_POST['age'];
         $UserGender = $_POST['Gender'];
@@ -40,7 +41,7 @@ if (isset($_POST['submit']))
             else 
             {
                 // SQL query to insert the data into the users table
-                $query = "INSERT INTO users (name, username, age, password, gender, phone_number) VALUES ('$UserName', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone')";
+                $query = "INSERT INTO users (Lname,Fname, username, age, password, gender, phone_number) VALUES ('$UserName', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone')";
 
                 // Execute the query
                 $result = mysqli_query($con, $query);

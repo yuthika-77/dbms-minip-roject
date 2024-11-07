@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,21 +8,23 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f2f2f2;
+             
             margin: 0;
             padding: 0;
             color: #333;
         }
         .container {
+             
             text-align: center;
             margin-top: 50px;
+            height:auto;
         }
         .header {
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             font-size: 24px;
-            background-color: #4CAF50;
-            color: white;
+             
+            color: purple;
         }
         .payment-box {
             background-color: white;
@@ -49,7 +52,7 @@
             font-size: 16px;
         }
         .payment-box button:hover {
-            background-color: #45a049;
+            background-color:plum;
         }
         .footer {
             text-align: center;
@@ -57,7 +60,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: #4CAF50;
+             
             color: white;
         }
     </style>
@@ -69,12 +72,12 @@
     <div class="container">
         <div class="payment-box">
             <h2>Enter Payment Details</h2>
-            <form action="confirmation.html" method="post">
+            <form  method="post">
                 <label for="card-number">Card Number:</label>
-                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" required>
+                <input type="number" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" required>
 
                 <label for="expiry-date">Expiry Date:</label>
-                <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
+                <input type="date" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
 
                 <label for="cvv">CVV:</label>
                 <input type="text" id="cvv" name="cvv" placeholder="123" required>
@@ -82,12 +85,37 @@
                 <label for="name">Cardholder's Name:</label>
                 <input type="text" id="name" name="name" placeholder="John Doe" required>
 
-                <button type="submit">Complete Payment</button>
+                <button type="submit" name="payment">Complete Payment</button>
             </form>
         </div>
     </div>
-    <div class="footer">
-        <p>&copy; 2024 Airline Reservation. All Rights Reserved.</p>
-    </div>
+   
 </body>
 </html>
+
+<?php
+require_once("connection.php");
+
+if (isset($_POST['payment']))
+{
+
+    $CardNo=$_POST['card-number'];
+    $Expiry=$_POST['expiry-date'];
+    $Name=$_POST['name'];
+    
+    $query="INSERT into Bill(B_name,Card_no,Expiry)VALUES ('$Name','$CardNo','$Expiry')";
+    $run=mysqli_query($con,$query);
+    if($run)
+    {
+        $status="paid";
+          $insertbill="INSERT into bill(status)VALUES('$status')";  
+        echo'<script>alert("Payment successfull");</script>';
+        header("confirmation.html");
+    }
+    else
+    {
+        mysqli_errno();
+    }
+
+}
+?>

@@ -13,8 +13,8 @@ if(isset($_POST['submit']))
     $ReturnDate=$_POST['return'];
     $ArrivalDate=$_POST['arrival_date'];
     $DepartureDate=$_POST['departure_date'];
-     
-    $insert_query ="INSERT into flight( Trip_type,F_no,Arrival_date,Departure_date,From_location,To_location,Arrival_time,Departure_time) VALUES ('$TripType','$FlightNo','$ArrivalDate','$DepartureDate','$From','$To','$ArrivalTime','$DepartureTime')";
+    $Price=$_POST['price'];
+    $insert_query ="INSERT into flight( Trip_type,F_no,Arrival_date,Departure_date,From_location,To_location,Arrival_time,Departure_time,Price) VALUES ('$TripType','$FlightNo','$ArrivalDate','$DepartureDate','$From','$To','$ArrivalTime','$DepartureTime','$Price')";
     $insert_result=mysqli_query($con,$insert_query);
      
     if($insert_result)
