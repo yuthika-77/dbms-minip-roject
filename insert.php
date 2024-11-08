@@ -1,47 +1,50 @@
 <?php
 require_once("connection.php");
 
-if (isset($_POST['submit'])) 
+if (isset($_POST['submit_user'])) 
 {
     // Check if any required fields are empty
-    if (empty($_POST['fname']) ||empty($_POST['lname']) || empty($_POST['email']) ||empty($_POST['username']) || empty($_POST['age']) || empty($_POST['gender']) || empty($_POST['phone']) || empty($_POST['password']) || empty($_POST['password1'])) 
+    if (empty($_POST['fname']) || empty($_POST['lname']) || empty($_POST['email']) || empty($_POST['uname']) || empty($_POST['age']) || empty($_POST['Gender']) || empty($_POST['phone']) || empty($_POST['pass1']) || empty($_POST['pass'])) 
     {
-        echo '<script>alert("Please fill in all the fields.")';
+        echo "<script>alert('Please fill in all the fields.'); window.location.href = 'Signup.html';</script>";
     } 
     else 
     {
-         
         $UserFirst = $_POST['fname'];
         $UserLast = $_POST['lname'];
         $UserUsername = $_POST['username'];
         $UserAge = $_POST['age'];
-        $UserGender = $_POST['Gender'];
-        $UserPhone = $_POST['PhoneNumber'];
+        $UserGender = $_POST['gender']; // corrected to lowercase
+        $UserPhone = $_POST['phone'];
         $UserPassword = $_POST['password'];
         $ConfirmPassword = $_POST['password1'];
 
         // Validate that both passwords match
         if ($UserPassword !== $ConfirmPassword)
-        { echo "<script>
-            alert( 'Passwords do not match.');
-            window.location.href = 'Signup.html'; // Redirect to login page
-        </script>";
+        { 
+            echo "<script>
+                alert('Passwords do not match.');
+                window.location.href = 'Signup.html'; // Redirect to signup page
+            </script>";
         }
         else 
         { 
-            $checkQuery = "SELECT * FROM users WHERE username = '$UserUsername' OR phone_number = '$UserPhone' OR password='$UserPassword'";
+            // Check if the username, phone, or password already exists
+            $checkQuery = "SELECT * FROM users WHERE username = '$UserUsername' OR phone_number = '$UserPhone'";
             $checkResult = mysqli_query($con, $checkQuery);
 
             if (mysqli_num_rows($checkResult) > 0) 
-            { echo "<script>
-                alert( 'Username/Phone Number/Account/Password already exists. Try Again.');
-                window.location.href = 'Signup.html'; // Redirect to login page
-            </script>";
+            { 
+                echo "<script>
+                    alert('Username/Phone Number already exists. Try again.');
+                    window.location.href = 'Signup.html';
+                </script>";
             } 
             else 
             {
                 // SQL query to insert the data into the users table
-                $query = "INSERT INTO users (Lname,Fname, username, age, password, gender, phone_number) VALUES ('$UserName', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone')";
+                $query = "INSERT INTO users (Lname, Fname, username, age, password, gender, phone_number) 
+                          VALUES ('$UserLast', '$UserFirst', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone')";
 
                 // Execute the query
                 $result = mysqli_query($con, $query);
@@ -49,13 +52,13 @@ if (isset($_POST['submit']))
                 if ($result)
                 {
                     echo "<script>
-                    alert('Sign up successful!');
-                    window.location.href = 'user.html'; // Redirect to login page
-                </script>";
+                        alert('Sign up successful!');
+                        window.location.href = 'user.html'; // Redirect to user page
+                    </script>";
                 } 
                 else
                 {
-                    $error = 'Please check your query.';
+                    echo "<script>alert('Error: Please check your query.');</script>";
                 }
             }
         }

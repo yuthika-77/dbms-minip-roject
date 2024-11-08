@@ -107,10 +107,11 @@ if (isset($_POST['payment']))
     $run=mysqli_query($con,$query);
     if($run)
     {
+        header("location:confirmation.html");
         $status="paid";
           $insertbill="INSERT into bill(status)VALUES('$status')";  
         echo'<script>alert("Payment successfull");</script>';
-        header("confirmation.html");
+         
     }
     else
     {
