@@ -19,7 +19,7 @@ if(isset($_POST['submit']))
      
     if($insert_result)
     {
-        echo'<div>Flight Added successfully</div>';
+        echo'<script>alert('Flight Added successfully!!!!');</script>';
     }
     else
     {
