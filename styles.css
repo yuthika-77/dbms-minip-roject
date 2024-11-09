@@ -4,7 +4,7 @@ body {
     display: flex;
     flex-direction: column; /* Keep elements in a vertical column */
     min-height: 100vh;
-    background: url('airline1.jpg') no-repeat center center fixed;
+    background-image:url('airline1.jpg');
     background-size: cover;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -12,14 +12,32 @@ body {
     align-items: center;
 }
 
-        header,footer {
+        header{
+            position: relative;
+         top: 0;
+          left: 0;
+          width: 100%;
             text-align: center;
             margin-top:0px;
             color: antiquewhite;
             background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
             padding: 5px; /* Padding for the header */
             width: 100%; /* Full width */
-            position: relative; /* Position for layout control */
+          
+        }
+        footer
+        {
+            position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin-top:0px;
+    color: antiquewhite;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    padding: 5px; /* Padding for the header */
+    width: 100%; /* Full width */
+   
         }
 
         .login-container {
@@ -180,6 +198,7 @@ body {
         }
 
         .modal-content {
+            position:relative;
             background-color: #e7f3ff;
             margin: auto; /* Centering the modal */
             padding: 10px;
@@ -188,17 +207,20 @@ body {
             overflow: auto; /* Scroll if needed */
             display: flex;
             flex-direction: column;
-            align-items:center;
-            justify-content: center; /* Center content vertically */
+         
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             border-radius: 8px; /* Slightly rounded corners */
         }
        /* General Styling */
        .news-section {
+        margin-top: auto; 
         position: relative;
         width: 100%;
-        height: 100vh; /* Full viewport height */
+        height: 500px; /* Adjust based on your preferred height */
         overflow: hidden;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 8px; /* Slightly rounded corners */
     }
 
     /* Carousel styling */
@@ -210,39 +232,68 @@ body {
 
     .news-item {
         min-width: 100%;
-        height: 100vh; /* Full viewport height */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
+        height: 100%;
         background-size: cover;
         background-position: center;
-        position: relative;
+        position: absolute;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
     }
+    
 
     /* Overlay for text */
     .overlay {
-        background: rgba(0, 0, 0, 0.5);
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        width: 80%;
-        max-width: 600px;
-    }
-
-    /* Navigation buttons */
-    .prev, .next {
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(0, 0, 0, 0.5);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
         color: white;
-        border: none;
-        font-size: 24px;
-        padding: 10px;
-        cursor: pointer;
-        z-index: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
+    /* Navigation buttons */
 
     .prev { left: 10px; }
     .next { right: 10px; }
+    modal-content .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: #aaa;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+                .close:hover,
+                .close:focus {
+                    color: black;
+                    text-decoration: none;
+                }
+                .nav-dots {
+                    position: absolute;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 1000;
+                }
+                
+                .dot {
+                    height: 15px;
+                    width: 15px;
+                    margin: 0 5px;
+                    background-color: white;
+                    border-radius: 50%;
+                    display: inline-block;
+                    transition: background-color 0.3s ease;
+                    cursor: pointer;
+                }
+                
+                .dot.active {
+                    background-color: rgba(255, 255, 255, 1); /* Active dot color */
+                }
+                
+    

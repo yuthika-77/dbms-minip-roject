@@ -7,17 +7,15 @@
     <title>GoOn Airline - Services</title>
     <style>
        
-
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute; /* Positioning for close button */
-            right: 20px;
-            top: 20px;
-            cursor: pointer;
-        }
-
+       .modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
             .close:hover,
             .close:focus {
                 color: black;
@@ -36,11 +34,6 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
-        }
-
-        button {
-            background-color: #00aaff;
-            color: white;
             border: none;
             cursor: pointer;
         }
@@ -48,6 +41,58 @@
             button:hover {
                 background-color: #00aaff;
             }
+            .button {
+            width: 20%; /* Full width for inputs */
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #00aaff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            .button:hover {
+                background-color: #00aaff;
+            }
+            .destinations-section {
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.0);
+            margin: 20px 0;
+        }
+
+        .destination-item {
+            display: inline-block;
+            color:antiquewhite;
+            margin: 10px;
+            padding: 20px;
+            background-color: rgba(231, 243, 255, 0.5);
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+            text-align: center;
+            color:white;
+        }
+
+        .destination-item:hover {
+            transform: scale(1.05);
+        }
+
+        .destination-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .destination-item h3 {
+            margin-top: 10px;
+            font-size: 20px;
+        }
+        
     </style>
 </head>
 <body>
@@ -55,61 +100,83 @@
         <h1>GoOn Airline</h1>
         <p>The best journey starts with us...</p>
         <nav>
-            <a href="homepage.html" class="tablink">Book a Flight</a>
-            <a href="#" class="tablink" onclick="openModal('manageFlightModal')">Manage Flight</a>
+            <a href="user.html">Home</a>
+            <a class="tablink"onclick="openModal('bookFlightModal')">Book a Flight</a>
+            <a class="tablink" onclick="openModal('manageFlightModal')">Manage Flight</a>
             <a href="#" class="tablink" onclick="openModal('checkStatusModal')">Check Flight Status</a>
-            <a href="#" class="tablink" onclick="openModal('checkinModal')">Check-in</a>
-            <a href="contact.html">About Us</a>
             <a href="logout.php">Logout</a>
         </nav>
     </header>
-
-    <section class="news-section">
-        <h2>Latest News</h2>
+   
+    <div class="news-section">
         <div class="carousel">
-            <div class="news-item" style="background-image: url('1.jpg');">
+            <div class="news-item" style="background-image: url('airline2.jpg');"onclick="window.location.href='dubai.html';">
                 <div class="overlay">
-                    <h3>New Routes Launched!</h3>
-                    <p>We're excited to announce new flight routes from New York to Los Angeles starting next month!</p>
+                    <h3> New Route Launch</h3>
+                    <p>"GoOn Airlines is proud to introduce our newest route international with non-stop flights from Goa to Dubai. Enjoy world-class service as you explore Dubai’s rich culture and cuisine."</p>
+                    <a href="dubai.html" target="_blank" class="button">Know More</a>
                 </div>
             </div>
-            <div class="news-item" style="background-image: url('image2.jpg');">
+            <div class="news-item" style="background-image: url('visa.jpg');">
                 <div class="overlay">
-                    <h3>Special Discounts Available</h3>
-                    <p>Book now and get up to 30% off on your next flight with us! Offer ends soon.</p>
+                    <h3>Visa Assistance for Your Destination</h3>
+                    <p>GoOn Airline offers comprehensive support to help you understand and manage visa requirements for your chosen destination. Our team stays up-to-date with the latest travel regulations and ensures you have the right information at the right time.</p>
+                    <a href="dubai.html" target="_blank" class="button">Know More</a>
                 </div>
             </div>
-            <div class="news-item" style="background-image: url('image3.jpg');">
+            <div class="news-item" style="background-image: url('family.jpg');">
                 <div class="overlay">
-                    <h3>Safety Measures in Place</h3>
-                    <p>Your safety is our top priority. Learn about the new health measures we've implemented.</p>
+                    <h3>Assistance for Families and Special Needs</h3>
+                    <p>Traveling with children, elderly family members, or passengers with reduced mobility? We’re here to make your experience seamless.</p>
+                    <a href="dubai.html" target="_blank" class="button">Know More</a>
                 </div>
             </div>
         </div>
-        <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
-        <button class="next" onclick="plusSlides(1)">&#10095;</button>
-    </section>    
-
+        <div class="nav-dots">
+            <span class="dot" onclick="currentSlide(0)"></span>
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+        </div>
+    </div>
+    <div class="destinations-section">
+        <h2 style="color:antiquewhite">Destinations We Fly</h2>
+        <div class="destination-item" onclick="window.location.href='goa.html';" style="background-image:url('goa.jpg'); background-size: cover;">
+            <h3>Goa</h3>
+            <p>Explore the beaches and vibrant culture of Goa.</p>
+        </div>
+        <div class="destination-item" onclick="window.location.href='mumbai.html';"style="background-image:url('mumbai.jpg'); background-size: cover;">
+            <h3>Mumbai</h3>
+            <p>Discover the city that never sleeps with amazing sights.</p>
+        </div>
+        <div class="destination-item" onclick="window.location.href='delhi.html';"style="background-image:url('delhi.jpg'); background-size: cover;">
+            <h3>Delhi</h3>
+            <p>Experience the rich history and modernity of Delhi.</p>
+        </div>
+        <div class="destination-item" onclick="window.location.href='dubai.html';"style="background-image:url('airline2.jpg'); background-size: cover;">
+            <h3>Dubai</h3>
+            <p>Indulge in luxury shopping, desert safaris, and much more.</p>
+        </div>
+        
+    </div>
     
-
-    <!-- Book a Flight Modal -->
     <div id="bookFlightModal" class="modal">
         <div class="modal-content">
+            <!-- Corrected close modal target here -->
             <span class="close" onclick="closeModal('bookFlightModal')">&times;</span>
             <h2>Book a Flight</h2>
-            <form action="bookFlight.php" method="post">
-                <label for="trip-type" >Trip Type:</label><br>
-                <div>
+            <p style="color:#aaa">Search and Book flights here</p>
+            <form action="booking.php" method="post">
+               
                     <label for="one-way">One-Way</label>
                     <input type="radio" id="one-way" name="trip-type" value="oneway" checked>
                     <label for="round-trip">Round-Trip</label>
                     <input type="radio" id="round-trip" name="trip-type" value="roundtrip">
-                </div>
+                <br/><br/>
 
-                <label for="from">From:</label>
+                <label for="from">From:</label><br/>
                 <input type="text" id="from" name="from" placeholder="Departure City or Airport" required>
 
-                <br/><label for="to">To:</label>
+                <br/><label for="to">To:</label><br/>
                 <input type="text" id="to" name="to" placeholder="Arrival City or Airport" required>
 
                 <br/><label for="departure">Departure Date:</label>
@@ -133,7 +200,6 @@
                     <option value="" selected>Select Class</option>
                     <option value="economy">Economy</option>
                     <option value="business">Business</option>
-                    <option value="first">First Class</option>
                 </select><br/><br/>
 
                 <button type="submit">Search Flights</button>
@@ -146,8 +212,9 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('manageFlightModal')">&times;</span>
             <h2>Manage Your Flight</h2>
+            <p style="color:#aaa">Check your flight deatils,manage your trips and more</p>
             <form action="manageFlight.php" method="post">
-                <input type="text" name="flightNumber" placeholder="Flight Number" required>
+                <input type="text" name="flightNumber" placeholder="Booking Reference" required>
                 <input type="text" name="lastName" placeholder="Last Name" required>
                 <button type="submit">Manage Flight</button>
             </form>
@@ -159,26 +226,13 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('checkStatusModal')">&times;</span>
             <h2>Check Flight Status</h2>
+            <p style="color:#aaa">Check your flight status</p>
             <form action="checkStatus.php" method="post">
                 <input type="text" name="flightNumber" placeholder="Flight Number" required>
                 <button type="submit">Check Status</button>
             </form>
         </div>
     </div>
-
-    <!-- Check-in Modal -->
-    <div id="checkinModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('checkinModal')">&times;</span>
-            <h2>Check-in</h2>
-            <form action="checkin.php" method="post">
-                <input type="text" name="confirmationNumber" placeholder="Confirmation Number" required>
-                <input type="text" name="lastName" placeholder="Last Name" required>
-                <button type="submit">Check-in</button>
-            </form>
-        </div>
-    </div>
-
     <footer>
         <p>2024 Airline Reservation. All Rights Reserved.</p>
     </footer>
@@ -198,26 +252,65 @@
                 closeModal(event.target.id);
             }
         };
-        let currentSlide = 0;
+        
+        let slideIndex = 0;
+let slideInterval;  // Variable to store the interval ID for auto-sliding
 
-function showSlide(index) {
-    const slides = document.querySelectorAll(".carousel .news-item");
-    currentSlide = (index + slides.length) % slides.length;
-    const offset = -currentSlide * 100;
-    document.querySelector(".carousel").style.transform = `translateX(${offset}%)`;
+function showSlides() {
+    const slides = document.querySelectorAll(".news-item");
+    const dots = document.querySelectorAll(".dot");
+
+    // Hide all slides and remove active class from all dots
+    slides.forEach((slide) => {
+        slide.style.opacity = 0;
+    });
+    dots.forEach((dot) => {
+        dot.classList.remove("active");
+    });
+
+    // Show the current slide and activate the corresponding dot
+    slides[slideIndex].style.opacity = 1;
+    dots[slideIndex].classList.add("active");
 }
 
 function plusSlides(n) {
-    showSlide(currentSlide + n);
+    slideIndex += n;
+    
+    if (slideIndex >= document.querySelectorAll(".news-item").length) {
+        slideIndex = 0; // Loop back to the first slide
+    }
+    
+    if (slideIndex < 0) {
+        slideIndex = document.querySelectorAll(".news-item").length - 1; // Go to the last slide if going backward
+    }
+
+    showSlides();
+    resetAutoSlide();  // Reset auto-slide when the user manually navigates
 }
 
-// Auto-slide function
-setInterval(() => {
-    plusSlides(1);
-}, 10000); // Changes slide every 5 seconds
+function currentSlide(n) {
+    slideIndex = n;
+    showSlides();
+    resetAutoSlide();  // Reset auto-slide when the user clicks a dot
+}
 
-// Initialize the first slide
-showSlide(currentSlide);
+// Function to reset or restart the auto-slide interval
+function resetAutoSlide() {
+    // Clear the existing auto-slide interval (if any)
+    clearInterval(slideInterval);
+
+    // Set a new interval to auto-slide every 3 seconds
+    slideInterval = setInterval(function() {
+        plusSlides(1);
+    }, 3000);
+}
+
+// Initialize the slideshow
+showSlides();
+
+// Optionally, set an auto-slide interval (e.g., every 3 seconds)
+resetAutoSlide();
+
 function getTodayDate() {
             const today = new Date();
             const year = today.getFullYear();
@@ -231,6 +324,12 @@ function getTodayDate() {
         document.getElementById('departure').setAttribute('min', minDate);
         document.getElementById('return').setAttribute('min', minDate);
         document.querySelectorAll('input[name="trip-type"]').forEach(function (element) {
+            element.addEventListener('change', function () {
+                document.getElementById('return-date-container').style.display = this.id === 'round-trip' ? 'block' : 'none';
+            });
+        });
+            // JavaScript to toggle the display of the return date field
+            document.querySelectorAll('input[name="trip-type"]').forEach(function (element) {
             element.addEventListener('change', function () {
                 document.getElementById('return-date-container').style.display = this.id === 'round-trip' ? 'block' : 'none';
             });
