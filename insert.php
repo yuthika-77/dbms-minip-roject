@@ -6,45 +6,48 @@ if (isset($_POST['submit_user']))
     // Check if any required fields are empty
     if (empty($_POST['fname']) || empty($_POST['lname']) || empty($_POST['email']) || empty($_POST['uname']) || empty($_POST['age']) || empty($_POST['Gender']) || empty($_POST['phone']) || empty($_POST['pass1']) || empty($_POST['pass'])) 
     {
-        echo "<script>alert('Please fill in all the fields.'); window.location.href = 'Signup.html';</script>";
+        echo "<script>alert('Please fill in all the fields.'); 
+        window.location.href = 'Signup.html';</script>";
     } 
     else 
     {
+        // Collect form data
         $UserFirst = $_POST['fname'];
         $UserLast = $_POST['lname'];
-        $UserUsername = $_POST['username'];
+        $UserUsername = $_POST['uname'];
         $UserAge = $_POST['age'];
-        $UserGender = $_POST['gender']; // corrected to lowercase
+        $UserGender = $_POST['Gender'];
         $UserPhone = $_POST['phone'];
-        $UserPassword = $_POST['password'];
-        $ConfirmPassword = $_POST['password1'];
+        $UserPassword = $_POST['pass'];
+        $ConfirmPassword = $_POST['pass1'];
+        $Email = $_POST['email'];
 
         // Validate that both passwords match
         if ($UserPassword !== $ConfirmPassword)
         { 
             echo "<script>
                 alert('Passwords do not match.');
-                window.location.href = 'Signup.html'; // Redirect to signup page
+                window.location.href = 'Signup.html';
             </script>";
         }
         else 
         { 
-            // Check if the username, phone, or password already exists
-            $checkQuery = "SELECT * FROM users WHERE username = '$UserUsername' OR phone_number = '$UserPhone'";
+            // Check if the username, phone, or email already exists
+            $checkQuery = "SELECT * FROM user WHERE username = '$UserUsername' OR phone_number = '$UserPhone' OR Email='$Email' OR password='$UserPassword'";
             $checkResult = mysqli_query($con, $checkQuery);
 
             if (mysqli_num_rows($checkResult) > 0) 
             { 
                 echo "<script>
-                    alert('Username/Phone Number already exists. Try again.');
+                    alert('Username, phone number, or email already exists. Try again.');
                     window.location.href = 'Signup.html';
                 </script>";
             } 
             else 
             {
                 // SQL query to insert the data into the users table
-                $query = "INSERT INTO users (Lname, Fname, username, age, password, gender, phone_number) 
-                          VALUES ('$UserLast', '$UserFirst', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone')";
+                $query = "INSERT INTO user (Lname, Fname, username, age, password, gender, phone_number, Email) 
+                          VALUES ('$UserLast', '$UserFirst', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone', '$Email')";
 
                 // Execute the query
                 $result = mysqli_query($con, $query);
@@ -53,12 +56,12 @@ if (isset($_POST['submit_user']))
                 {
                     echo "<script>
                         alert('Sign up successful!');
-                        window.location.href = 'user.html'; // Redirect to user page
+                        window.location.href = 'index.html?login=user'; // Redirect to login page with query parameter
                     </script>";
                 } 
                 else
                 {
-                    echo "<script>alert('Error: Please check your query.');</script>";
+                    echo "<script>alert('Error: Could not execute query.');</script>";
                 }
             }
         }

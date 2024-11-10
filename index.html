@@ -27,14 +27,12 @@
         <!-- Admin Login Form -->
         <div id="adminLogin" class="login-box">
             <h2>Admin Login</h2>
-            <form onsubmit="return login()" method="post">
                 <input type="hidden" name="loginType" value="admin">
                 <input type="text" id="ausername" name="ausername" placeholder="Admin username" required>
                 <input type="password" id="apassword" name="apassword" placeholder="Enter password" required>
-                <button type="submit" value="submit">Login</button>
+                <button type="submit" value="submit" onclick="login();">Login</button>
                 <button type="reset" value="reset">Cancel</button>
                 <br /><br /> <a onclick="backToPrompt()">Back</a>
-            </form>
         </div>
 
         <!-- User Login Form -->
@@ -86,24 +84,30 @@
         const staticUsername = "admin";
         const staticPassword = "password123";
 
+        // Handle login for admin
         function login() {
+            event.preventDefault(); // Prevent the default form submission
+
             const username = document.getElementById('ausername').value;
             const password = document.getElementById('apassword').value;
             const adminLogin = document.getElementById("adminLogin");
 
             if (username === staticUsername && password === staticPassword) {
-                window.location.href = "admin.html"; // Redirect to the admin page
-                return false; // Prevent default form submission
+                // Redirect to admin.php if credentials are correct
+                window.location.href = "admin.php";
             } else {
                 alert("Invalid username or password.");
-                const username = document.getElementById('ausername');
-                const password = document.getElementById('apassword')
-
-                username.value = "";
-                password.value = "";
+                // Clear fields after failed login
+                document.getElementById('ausername').value = "";
+                document.getElementById('apassword').value = "";
                 adminLogin.classList.add("active");
                 document.getElementById("promptBox").classList.remove("active");
-                return false; // Prevent default form submission
+            }
+        }
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('login') === 'user') {
+                showLoginForm('user');
             }
         }
     </script>
