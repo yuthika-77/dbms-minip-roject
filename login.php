@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['username'] = $username; // Start session if user is found
                 echo "<script>
                 alert( 'Welcome,$username.....');
-                window.location.href = 'user.html'; // Redirect to login page
+                window.location.href = 'user.php'; // Redirect to login page
             </script>";
                 exit;
             } else {echo "<script>
