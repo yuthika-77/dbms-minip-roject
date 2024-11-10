@@ -1,9 +1,17 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: index.html?login=user"); // Redirect to login page if not logged in
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>GoOn Airline - Services</title>
     <style>
        
@@ -63,6 +71,43 @@
             background-color: rgba(255, 255, 255, 0.0);
             margin: 20px 0;
         }
+       /* Live search suggestion container */
+#livesearch-from, #livesearch-to {
+    border: 1px solid #A5ACB2;
+    display: none; /* Initially hidden */
+    width: 100%;
+    max-width: 300px;
+    background-color: white;
+    position: absolute;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    border-radius: 4px;
+    padding: 5px 0;
+    left: 0;  /* Align suggestion box with the left edge of the input */
+    cursor: pointer;}
+    
+
+/* Styling for each suggestion item */
+#livesearch-from div, #livesearch-to div {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    padding-left: 12px;
+}
+
+/* Hover effect for suggestion items */
+#livesearch-from div:hover, #livesearch-to div:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+}
+
+/* Ensure the input fields are positioned relative to contain the absolute dropdown */
+input[type="text"] {
+    position: relative;
+    padding-right: 25px;
+}
 
         
         
@@ -138,20 +183,23 @@
             <span class="close" onclick="closeModal('bookFlightModal')">&times;</span>
             <h2>Book a Flight</h2>
             <p style="color:#aaa">Search and Book flights here</p>
-            <form action="booking.php" method="post">
+            <form action="booking.php" method="post" onsubmit="return validateBook()">
                
                     <label for="one-way">One-Way</label>
                     <input type="radio" id="one-way" name="trip-type" value="oneway" checked>
                     <label for="round-trip">Round-Trip</label>
                     <input type="radio" id="round-trip" name="trip-type" value="roundtrip">
                 <br/><br/>
-
+                <div class="dropdown-container">
                 <label for="from">From:</label><br/>
-                <input type="text" id="from" name="from" placeholder="Departure City or Airport" required>
-
+                <input type="text" id="from" name="from"  placeholder="Departure City or Airport" required>
+                <div id="livesearch-from"></div>
+</div>
+<div class="dropdown-container">
                 <br/><label for="to">To:</label><br/>
                 <input type="text" id="to" name="to" placeholder="Arrival City or Airport" required>
-
+                <div id="livesearch-to"></div>
+</div>
                 <br/><label for="departure">Departure Date:</label>
                 <input type="date" id="departure" name="departure" required>
                 <div id="return-date-container" style="display: none;">
@@ -160,7 +208,7 @@
                 </div>
                <br/> <label for="passengers">Passengers:</label>
                 <select id="passengers" name="passengers" required min="1" max="5">
-                    <option value="" selected>Select No of Passangers</option>
+                    <option value="none" selected>Select No of Passangers</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -170,7 +218,7 @@
 
                 <label for="class">Class:</label>
                 <select id="class" name="class" required>
-                    <option value="" selected>Select Class</option>
+                    <option value="none" selected>Select Class</option>
                     <option value="economy">Economy</option>
                     <option value="business">Business</option>
                 </select><br/><br/>
@@ -307,6 +355,123 @@ function getTodayDate() {
                 document.getElementById('return-date-container').style.display = this.id === 'round-trip' ? 'block' : 'none';
             });
         });
+        $(document).ready(function () {
+    // Function to handle input and show suggestions for both "From" and "To"
+    function handleInput(inputId, dropdownId, type) {
+        $(inputId).on('input', function () {
+            var query = $(this).val().trim();
+            if (query.length > 0) {
+                // Send AJAX request to get suggestions based on the input field type ("from" or "to")
+                $.ajax({
+                    url: 'suggestion.php',  // PHP file to fetch location data
+                    type: 'GET',
+                    data: { q: query, type: type },
+                    success: function (data) {
+                        // Parse the returned data
+                        var locations = JSON.parse(data);
+                        var dropdown = $(dropdownId);
+                        dropdown.empty();  // Clear previous results
+
+                        if (locations.length > 0) {
+                            locations.forEach(function (location) {
+                                dropdown.append('<div onclick="selectLocation(\'' + location + '\', \'' + inputId + '\')">' + location + '</div>');
+                            });
+                            dropdown.show();  // Show the dropdown if results are found
+                        } else {
+                            // Show "No locations found" and make it clickable
+                            dropdown.append('<div class="no-location" onclick="hideDropdown(\'' + dropdownId + '\')">No locations found</div>');
+                            dropdown.show();
+                        }
+                    }
+                });
+            } else {
+                $(dropdownId).hide();  // Hide the dropdown if input is empty
+            }
+        });
+    }
+
+    // Function to set the input field with the selected location
+    window.selectLocation = function (location, inputId) {
+        $(inputId).val(location);
+        $(inputId).next('div').hide();  // Hide the dropdown after selection
+    };
+
+    // Function to hide the dropdown (for "No locations found" click)
+    window.hideDropdown = function (dropdownId) {
+        $(dropdownId).hide();  // Hide the dropdown when "No locations found" is clicked
+    };
+
+    // Close dropdown if user clicks anywhere outside the input or dropdown
+    $(document).on('click', function (event) {
+        var target = $(event.target);
+        // Check if the clicked target is outside of input and dropdown
+        if (!target.closest('#from, #livesearch-from').length && !target.closest('#to, #livesearch-to').length) {
+            $('#livesearch-from').hide();  // Hide 'from' dropdown
+            $('#livesearch-to').hide();    // Hide 'to' dropdown
+        }
+    });
+
+    // Initialize the input handlers for both "From" and "To"
+    handleInput('#from', '#livesearch-from', 'from');
+    handleInput('#to', '#livesearch-to', 'to');
+});
+
+
+        
+        function clearResults() {
+            document.getElementById("search").value = ''; // Clear the search input
+        }
+        function validateBook() {
+    let from = document.getElementById("from").value;
+    let to = document.getElementById("to").value;
+    let departure = document.getElementById("departure").value;
+    let passengers = document.getElementById("passengers").value;
+    let classType = document.getElementById("class").value;
+
+   
+    if(from === "")
+    {
+        alert("Select departure city or airport");
+        return false;
+    }
+    if(to === "")
+    {
+        alert("Select arrival city or airport");
+        return false;
+    }
+    // Check if "From" and "To" are not the same
+    if (from.toLowerCase() === to.toLowerCase()) {
+        alert("Departure city and arrival city cannot be the same.");
+        return false; // Prevent form submission
+    }
+
+    // Check if passengers is a valid selection
+    if (parseInt(passengers) < 1 || parseInt(passengers) > 5) {
+        alert("Please select a valid number of passengers.");
+        return false; // Prevent form submission
+    }
+    if (document.getElementById('round-trip').checked) {
+        if (departure === "" || returnDate === "") {
+            alert("Please select both Departure Date and Return Date for a Round-Trip.");
+            return false; // Prevent form submission
+        }
+
+        // Ensure the Return Date is after the Departure Date (additional check)
+        if (new Date(returnDate) < new Date(departure)) {
+            alert("Return date must be after the departure date.");
+            return false; // Prevent form submission
+        }
+    }
+
+    return true; // Allow form submission if all checks pass
+}
+
+// Event listener to trigger form validation on submission
+document.querySelector("form").addEventListener("submit", function (event) {
+    if (!validateBook()) {
+        event.preventDefault(); // Prevent form submission if validation fails
+    }
+});
     </script>
 </body>
 </html>
