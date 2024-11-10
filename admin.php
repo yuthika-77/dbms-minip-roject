@@ -196,13 +196,13 @@ if (!isset($_SESSION['submit']) !== true) {
             </ul>
         </li>
         <li>
-            <a>
+            <!-- <a>
                 💺 Manage Seats
             </a>
             <ul>
                 <li><a href="checkin.php">🛂 Check-in</a></li>
                 <li><a href="viewseats.php">💺 View Seats</a></li>
-            </ul>
+            </ul> -->
         </li>
     </ul>
 </div>

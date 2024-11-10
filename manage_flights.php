@@ -4,7 +4,7 @@ include('connection.php');
 
 // Fetch all flights
 $query = "SELECT * FROM flight";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query($con, $query);
 ?>
 
 <!DOCTYPE html>
