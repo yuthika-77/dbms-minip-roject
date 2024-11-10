@@ -183,7 +183,7 @@ input[type="text"] {
             <span class="close" onclick="closeModal('bookFlightModal')">&times;</span>
             <h2>Book a Flight</h2>
             <p style="color:#aaa">Search and Book flights here</p>
-            <form action="booking.php" method="post" onsubmit="return validateBook()">
+            <form action="Search.php" method="post" onsubmit="return validateBook()">
                
                     <label for="one-way">One-Way</label>
                     <input type="radio" id="one-way" name="trip-type" value="oneway" checked>
@@ -234,8 +234,8 @@ input[type="text"] {
             <span class="close" onclick="closeModal('manageFlightModal')">&times;</span>
             <h2>Manage Your Flight</h2>
             <p style="color:#aaa">Check your flight deatils,manage your trips and more</p>
-            <form action="manageFlight.php" method="post">
-                <input type="text" name="flightNumber" placeholder="Booking Reference" required>
+            <form action="manageFlight.php" method="post" onsubmit="return validateFlight()">
+                <input type="text" name="PNR" placeholder="Booking Reference(PNR)" required>
                 <input type="text" name="lastName" placeholder="Last Name" required>
                 <button type="submit">Manage Flight</button>
             </form>
@@ -248,7 +248,7 @@ input[type="text"] {
             <span class="close" onclick="closeModal('checkStatusModal')">&times;</span>
             <h2>Check Flight Status</h2>
             <p style="color:#aaa">Check your flight status</p>
-            <form action="checkStatus.php" method="post">
+            <form action="checkStatus.php" method="post" onsubmit="return validateStatus()">
                 <input type="text" name="flightNumber" placeholder="Flight Number" required>
                 <button type="submit">Check Status</button>
             </form>
@@ -421,27 +421,31 @@ function getTodayDate() {
         function clearResults() {
             document.getElementById("search").value = ''; // Clear the search input
         }
+        
         function validateBook() {
     let from = document.getElementById("from").value;
     let to = document.getElementById("to").value;
     let departure = document.getElementById("departure").value;
+    let returnDate = document.getElementById("return").value; // Add this line to capture return date
     let passengers = document.getElementById("passengers").value;
     let classType = document.getElementById("class").value;
 
-   
-    if(from === "")
-    {
+    // Check if the "From" and "To" fields are not empty
+    if (from === "") {
         alert("Select departure city or airport");
         return false;
     }
-    if(to === "")
-    {
+    if (to === "") {
         alert("Select arrival city or airport");
         return false;
     }
+
     // Check if "From" and "To" are not the same
     if (from.toLowerCase() === to.toLowerCase()) {
         alert("Departure city and arrival city cannot be the same.");
+        document.getElementById("from").value = ""; // Clear departure date
+            document.getElementById("to").value = "";    // Clear return date
+
         return false; // Prevent form submission
     }
 
@@ -450,6 +454,8 @@ function getTodayDate() {
         alert("Please select a valid number of passengers.");
         return false; // Prevent form submission
     }
+
+    // If "Round-Trip" is selected, validate the dates
     if (document.getElementById('round-trip').checked) {
         if (departure === "" || returnDate === "") {
             alert("Please select both Departure Date and Return Date for a Round-Trip.");
@@ -459,19 +465,65 @@ function getTodayDate() {
         // Ensure the Return Date is after the Departure Date (additional check)
         if (new Date(returnDate) < new Date(departure)) {
             alert("Return date must be after the departure date.");
+            document.getElementById("departure").value = ""; // Clear departure date
+            document.getElementById("return").value = "";    // Clear return date
+
             return false; // Prevent form submission
         }
+    }
+    if (document.getElementById('one-way').checked) {
+        if (departure === "" ) {
+            alert("Please select Departure Date .");
+            return false; // Prevent form submission
+        }
+
+       
+    }
+
+    return true; // Allow form submission if all checks pass
+}
+function validateFlight() {
+    let pnr = document.getElementsByName("PNR")[0].value;
+    let lastName = document.getElementsByName("lastName")[0].value;
+
+    // Validate PNR field (checking if it's not empty and if it's alphanumeric)
+    if (pnr.trim() === ""||pnr.length>6||pnr.length<6) {
+        alert("Please enter valid Booking Reference (PNR).");
+        return false; // Prevent form submission
+    }
+    
+    if (!/^[a-zA-Z0-9]+$/.test(pnr)) {
+        alert("PNR should be alphanumeric.");
+        return false; // Prevent form submission
+    }
+
+    // Validate lastName field (checking if it's not empty)
+    if (lastName.trim() === "") {
+        alert("Please enter your Last Name.");
+        return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission if all checks pass
+}
+function validateStatus() {
+    let flightNumber = document.getElementsByName("flightNumber")[0].value.trim();
+
+    // Validate Flight Number (should be airline code + exactly 3 digits, e.g., AA123)
+    if (flightNumber === "") {
+        alert("Please enter a Flight Number.");
+        return false; // Prevent form submission
+    }
+
+    // Flight number validation: airline code (2+ letters) followed by exactly 3 digits
+    const flightNumberPattern = /^[A-Z]{2,}[0-9]{3}$/; // Match 2+ uppercase letters followed by exactly 3 digits
+    if (!flightNumberPattern.test(flightNumber)) {
+        alert("Flight number must start with 2 or more uppercase letters followed by exactly 3 digits (e.g., AA123).");
+        return false; // Prevent form submission
     }
 
     return true; // Allow form submission if all checks pass
 }
 
-// Event listener to trigger form validation on submission
-document.querySelector("form").addEventListener("submit", function (event) {
-    if (!validateBook()) {
-        event.preventDefault(); // Prevent form submission if validation fails
-    }
-});
     </script>
 </body>
 </html>
