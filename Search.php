@@ -1,32 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Flights</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <title>GoOn Airline - Flight Search Results</title>
     <style>
-        /* General styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Container for flight details */
-        .flights-available {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: linen;
-            border-radius: 15px;
-            width: 100%;
-            /* max-width: 800px; */
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
+        
         /* Header for flights available */
         .flights-available h2 {
             font-size: 36px;
@@ -78,57 +58,68 @@
             margin-bottom: 10px;
             text-align: left;
         }
-        .select
-        {
-            width:300px;
-            background-color: purple;
-            font-size: 20px;
-            color:white;
-
-            padding:10px;
-            border-radius:10px;
-        }
+    
     </style>
 </head>
 <body>
-    <?php
-    session_start();
-   
-    require_once("connection.php");
+<header>
+        <h1>GoOn Airline</h1>
+        <p>The best journey starts with us...</p>
+    </header>
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: index.html?login=user"); // Redirect to login page if not logged in
+    exit;
+}
 
-    if (isset($_POST['submit'])) 
-    {
-        $TripType = $_POST['trip-type'];
-        $FromLocation = $_POST['fromlocation'];
-        $ToLocation = $_POST['tolocation'];
-        $DepartureDate = $_POST['departure'];
+require_once("connection.php");
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Capture form data without sanitization
+    $TripType = $_POST['trip-type'];
+    $FromLocation = $_POST['from'];
+    $ToLocation = $_POST['to'];
+    $DepartureDate = $_POST['departure'];
+    $Passengers = $_POST['passengers'];
+
+    // If it's a round-trip, capture return date
+    $ReturnDate = null;
+    if ($TripType === 'round-trip' && !empty($_POST['return'])) {
         $ReturnDate = $_POST['return'];
-        $Passengers = $_POST['passengers'];
-        $_SESSION['passengerCount'] = $_POST['passengers'];
+    }
 
-        $check_query = "SELECT F_id, Price, Departure_time, Arrival_time FROM flight 
-        WHERE Trip_type='$TripType' 
-        AND Departure_date='$DepartureDate' 
-        AND To_location='$ToLocation' 
-        AND From_location='$FromLocation'";
-$result = mysqli_query($con, $check_query);
+    // Store passenger count in session for later use in booking
+    $_SESSION['passengerCount'] = $Passengers;
 
-         if ($result && mysqli_num_rows($result)>0)
-          {
-            while($flight=mysqli_fetch_assoc($result)) 
-            {
-             
-              echo'<h2>Flights Available</h2>';
-            
-        $Fid = $flight['F_id']; 
-                $DepartureTime = $flight['Departure_time'];
-                $ArrivalTime = $flight['Arrival_time'];
-                $Price = $flight['Price'];
-                echo '<div class="flights-available">
-                    <h2>Flights Available</h2>
+    // Define the SQL query for flight search
+    $check_query = "
+        SELECT F_no, Price, Departure_time, Arrival_time, From_location, To_location
+        FROM flight
+        WHERE Departure_date = '$DepartureDate'
+        AND To_location = '$ToLocation'
+        AND From_location = '$FromLocation'
+        AND Availablity >= $Passengers
+    ";
+
+    $result = mysqli_query($con, $check_query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        echo '<div class="login-container" style="width:auto;">
+                <h2>Flight(s) Available</h2>';
+        $i = 0;  // Initialize flight number counter
+        while ($flight = mysqli_fetch_assoc($result)) {
+            $i++;  // Increment the flight number for each flight
+            $Fid = $flight['F_no'];
+            $DepartureTime = $flight['Departure_time'];
+            $ArrivalTime = $flight['Arrival_time'];
+            $Price = $flight['Price'];
+
+            // Display available flights with numbering
+            echo '<div class="login-container">
                     <div class="details">
                         <div class="To-dec">
-                            <div class="section-title">From</div>
+                            <div class="section-title">' . $i . ')From</div>
                             <ul>
                                 <li>From Location: <strong>' . $FromLocation . '</strong></li>
                                 <li>Departure Date: <strong>' . $DepartureDate . '</strong></li>
@@ -139,33 +130,80 @@ $result = mysqli_query($con, $check_query);
                             <div class="section-title">To</div>
                             <ul>
                                 <li>To Location: <strong>' . $ToLocation . '</strong></li>';
-                if ($TripType == 'roundtrip') {
-                    echo '<li>Return Date: <strong>' . $ReturnDate . '</strong></li>';
-                }
-                echo '<li>Arrival Time: <strong>' . $ArrivalTime . '</strong></li>
+            
+            echo '<li>Arrival Time: <strong>' . $ArrivalTime . '</strong></li>
                                 <li>Price: <strong>' . $Price . '</strong></li>
-
                             </ul>
                         </div>
                     </div>
-                    <form action="booking.php" method="post">
-                    <input type="hidden" name="FlightID" value="' . $Fid . '">
-                        <input type="hidden" name="Price" value="' . $Price . '">
-                    <button type="submit" class="select" name="select" FlightID="'.$Fid.'" Price = "'.$Price.'">Select</button>
-                    </form>
-                </div>';
-            } 
-        }
-           
-         else {
-            echo "No flights found for your search criteria.";
+                    </div>';
+
+            // If it's a round trip, show return flight details
+            if ($TripType === 'round-trip' && $ReturnDate) {
+                $return_query = "
+                    SELECT F_no, Price, Departure_time, Arrival_time, From_location, To_location
+                    FROM flight
+                    WHERE Departure_date = '$ReturnDate'
+                    AND From_location = '$ToLocation'
+                    AND To_location = '$FromLocation'
+                    AND Availablity >= $Passengers
+                ";
+
+                $return_result = mysqli_query($con, $return_query);
+
+                if ($return_result && mysqli_num_rows($return_result) > 0) {
+                    echo '<h3>Return Flight</h3>';
+                    while ($return_flight = mysqli_fetch_assoc($return_result)) {
+                        $ReturnFid = $return_flight['F_no'];
+                        $ReturnDepartureTime = $return_flight['Departure_time'];
+                        $ReturnArrivalTime = $return_flight['Arrival_time'];
+                        $ReturnPrice = $return_flight['Price'];
+
+                        // Display return flight with numbering
+                        echo '<div class="login-container" style="width:80%;">
+                                <div class="details">
+                                    <div class="To-dec">
+                                        <div class="section-title">' . $i . '). Return From</div>
+                                        <ul>
+                                            <li>From Location: <strong>' . $ToLocation . '</strong></li>
+                                            <li>Departure Date: <strong>' . $ReturnDate . '</strong></li>
+                                            <li>Departure Time: <strong>' . $ReturnDepartureTime . '</strong></li>
+                                        </ul>
+                                    </div>
+                                    <div class="From-dec">
+                                        <div class="section-title">To</div>
+                                        <ul>
+                                            <li>To Location: <strong>' . $FromLocation . '</strong></li>
+                                            <li>Arrival Time: <strong>' . $ReturnArrivalTime . '</strong></li>
+                                            <li>Price: <strong>' . $ReturnPrice . '</strong></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>';
+                    }
+                } else {
+                    echo "<p>No return flights found for your search criteria.</p>";
+                }
             }
-              
+
+            // Add a selection button for booking the flight
+            echo '<form action="booking.php" method="post">
+                    <input type="hidden" name="FlightID" value="' . $Fid . '">
+                    <input type="hidden" name="Price" value="' . $Price . '">
+                    <button type="submit"class="button" >Select</button>
+                </form>
+            </div>
+            ';
         }
-       
-    else {
-        echo "Form not submitted.";
+    } else {
+        echo "<p>No flights found for your search criteria.</p>";
     }
-    ?>
+} else {
+    echo "<p>Form not submitted correctly.</p>";
+}
+?>
+<footer>
+    <p>2024 Airline Reservation. All Rights Reserved.</p>
+</footer>
 </body>
-</html>  
+</html>
