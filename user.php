@@ -121,7 +121,7 @@ input[type="text"] {
             <a href="user.html">Home</a>
             <a class="tablink"onclick="openModal('bookFlightModal')">Book a Flight</a>
             <a class="tablink" onclick="openModal('manageFlightModal')">Manage Flight</a>
-            <a href="#" class="tablink" onclick="openModal('checkStatusModal')">Check Flight Status</a>
+            
             <a href="logout.php">Logout</a>
         </nav>
     </header>
@@ -229,7 +229,7 @@ input[type="text"] {
             <span class="close" onclick="closeModal('manageFlightModal')">&times;</span>
             <h2>Manage Your Flight</h2>
             <p style="color:#aaa">Check your flight deatils,manage your trips and more</p>
-            <form action="manageFlight.php" method="post" onsubmit="return validateFlight()">
+            <form action="confirmation.php" method="post" onsubmit="return validateFlight()">
                 <input type="text" name="PNR" placeholder="Booking Reference(PNR)" required>
                 <input type="text" name="lastName" placeholder="Last Name" required>
                 <button type="submit">Manage Flight</button>
@@ -237,18 +237,7 @@ input[type="text"] {
         </div>
     </div>
 
-    <!-- Check Flight Status Modal -->
-    <div id="checkStatusModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('checkStatusModal')">&times;</span>
-            <h2>Check Flight Status</h2>
-            <p style="color:#aaa">Check your flight status</p>
-            <form action="checkStatus.php" method="post" onsubmit="return validateStatus()">
-                <input type="text" name="flightNumber" placeholder="Flight Number" required>
-                <button type="submit">Check Status</button>
-            </form>
-        </div>
-    </div>
+ 
     <footer>
         <p>2024 Airline Reservation. All Rights Reserved.</p>
     </footer>

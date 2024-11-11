@@ -88,36 +88,34 @@
 </html>
 
 <?php
+session_start();
 require_once("connection.php");
 
 if (isset($_POST['payment'])) {
-
-    // Get the form data
+    // Get payment form data
     $CardNo = $_POST['card-number'];
     $Expiry = $_POST['expiry-date'];
     $Name = $_POST['name'];
-    
-    // Assuming you have the booking_id and total amount available
-    session_start();
-    $booking_id = $_SESSION['booking_id']; // Get the booking ID from the session
-    $totalAmount = $_SESSION['total_price']; // Get the total price from the session
 
-    // Insert payment details into Bill table
-    $query = "INSERT INTO Bill (    Amount, booking_id, payment_status) 
-              VALUES (   '$totalAmount', '$booking_id', 'paid')";
+    // Retrieve booking ID and total amount from session
+    $booking_id = $_SESSION['booking_id'];
+    $totalAmount = $_SESSION['totalAmount'];
 
-    $run = mysqli_query($con, $query);
+    // Insert payment details into the Bill table
+    $query = "INSERT INTO Bill (Amount, booking_id, payment_status) 
+              VALUES ('$totalAmount', '$booking_id', 'paid')";
 
-    if ($run) {
-        // Update booking status to 'confirmed' after payment
+    if (mysqli_query($con, $query)) {
+        // Update booking status to 'confirmed' after successful payment
         $update_booking = "UPDATE booking SET status = 'confirmed' WHERE booking_id = '$booking_id'";
         mysqli_query($con, $update_booking);
 
-        // Redirect to confirmation page
-        header("Location: user.php");
-        echo '<script>alert("Payment successful. Your booking is confirmed.");</script>';
+        // Redirect to the confirmation page with the booking ID
+        header("Location: confirmation.php?bid=$booking_id");
+        exit();
     } else {
         echo '<script>alert("Error: Payment failed. Please try again.");</script>';
     }
 }
 ?>
+

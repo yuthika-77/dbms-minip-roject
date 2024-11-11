@@ -1,70 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css" type="text/css">
-    <title>GoOn Airline - Booking</title>
-    <style>
-        /* Outer login container for the entire form */
-        #outer {
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 150%; /* Set the width to a larger size for outer container */
-        }
-
-        /* Inner login container for each passenger or details */
-        .login-container {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: auto; /* Inner container should be smaller */
-        }
-
-        /* Group input fields within each container */
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        /* Button styling */
-        .button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-<header>
-    <h1>GoOn Airline</h1>
-    <p>The best journey starts with us...</p>
-</header>
-
 <?php
 session_start();
 require_once("connection.php");
@@ -77,14 +10,15 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+// Handle the selection of flight and store the FlightID in the session
 if (isset($_POST['select'])) {
+    $F_id = $_POST['FlightID'];
+    $_SESSION['FlightID'] = $F_id; // Store FlightID in session
+
     // Generate PNR code
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $pnr = substr(str_shuffle($characters), 0, 6);
 
-    // Get the flight ID 
-    $F_id = $_POST['FlightID'];
-    
     // Fetch the price based on the class (p_eco or p_bus)
     $query = "SELECT p_eco, p_bus FROM flight WHERE F_no = '$F_id'";
     $result = mysqli_query($con, $query);
@@ -96,13 +30,10 @@ if (isset($_POST['select'])) {
     }
 
     // Begin the form to collect passenger details
-    echo '<form method="post" action="insert_passenger.php" onsubmit="return validateForm()">';
+    echo '<form method="post" action="insert_passenger.php" onsubmit="updateTotalPrice(); return validateForm()">'; // Call updateTotalPrice on submit
 
     // Outer container to wrap everything (with proper styling)
     echo '<div class="login-container" id="outer">';
-
-    // Initialize total price to 0
-    $totalPrice = 0;
 
     // Loop through passenger count and display fields for each passenger within their own container
     for ($i = 1; $i <= $passengerCount; $i++) {
@@ -159,16 +90,13 @@ if (isset($_POST['select'])) {
     // Total price display
     echo '<div class="input-group">
             <label for="totalPrice">Total Price:</label>
-            <input type="hidden" id="totalPrice" name="totalPrice" value="0"  >
+            <input type="text" id="totalPrice" name="totalPrice" value="0" readonly>
           </div>';
 
-    // Hidden fields to pass Flight ID, PNR, and total cost for further processing
-    echo '<input type="hidden" value="' . htmlspecialchars($F_id) . '" name="FlightID">
-          <input type="hidden" value="' . htmlspecialchars($pnr) . '" name="PNR">
-                    
-
-          <button type="submit" class="button" name="submit">Proceed to Checkout</button>
-    </div>'; // Close outer-container
+    // Proceed to checkout button
+    echo '<button type="submit" class="button" name="submit" id="submitBtn">Proceed to Checkout</button>';
+    
+    echo '</div>'; // Close outer-container
 
     // End of form
     echo '</form>';
