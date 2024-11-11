@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,13 +7,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-             
             margin: 0;
             padding: 0;
             color: #333;
         }
         .container {
-             
             text-align: center;
             margin-top: 50px;
             height:auto;
@@ -23,7 +20,6 @@
             text-align: center;
             padding: 10px;
             font-size: 24px;
-             
             color: purple;
         }
         .payment-box {
@@ -52,7 +48,7 @@
             font-size: 16px;
         }
         .payment-box button:hover {
-            background-color:plum;
+            background-color: plum;
         }
         .footer {
             text-align: center;
@@ -60,7 +56,6 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-             
             color: white;
         }
     </style>
@@ -72,7 +67,7 @@
     <div class="container">
         <div class="payment-box">
             <h2>Enter Payment Details</h2>
-            <form  method="post">
+            <form method="post">
                 <label for="card-number">Card Number:</label>
                 <input type="number" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" required>
 
@@ -89,34 +84,40 @@
             </form>
         </div>
     </div>
-   
 </body>
 </html>
 
 <?php
 require_once("connection.php");
 
-if (isset($_POST['payment']))
-{
+if (isset($_POST['payment'])) {
 
-    $CardNo=$_POST['card-number'];
-    $Expiry=$_POST['expiry-date'];
-    $Name=$_POST['name'];
+    // Get the form data
+    $CardNo = $_POST['card-number'];
+    $Expiry = $_POST['expiry-date'];
+    $Name = $_POST['name'];
     
-    $query="INSERT into Bill(B_name,Card_no,Expiry)VALUES ('$Name','$CardNo','$Expiry')";
-    $run=mysqli_query($con,$query);
-    if($run)
-    {
-        header("location:confirmation.html");
-        $status="paid";
-          $insertbill="INSERT into bill(status)VALUES('$status')";  
-        echo'<script>alert("Payment successfull");</script>';
-         
-    }
-    else
-    {
-        mysqli_errno();
-    }
+    // Assuming you have the booking_id and total amount available
+    session_start();
+    $booking_id = $_SESSION['booking_id']; // Get the booking ID from the session
+    $totalAmount = $_SESSION['total_price']; // Get the total price from the session
 
+    // Insert payment details into Bill table
+    $query = "INSERT INTO Bill (    Amount, booking_id, payment_status) 
+              VALUES (   '$totalAmount', '$booking_id', 'paid')";
+
+    $run = mysqli_query($con, $query);
+
+    if ($run) {
+        // Update booking status to 'confirmed' after payment
+        $update_booking = "UPDATE booking SET status = 'confirmed' WHERE booking_id = '$booking_id'";
+        mysqli_query($con, $update_booking);
+
+        // Redirect to confirmation page
+        header("Location: user.php");
+        echo '<script>alert("Payment successful. Your booking is confirmed.");</script>';
+    } else {
+        echo '<script>alert("Error: Payment failed. Please try again.");</script>';
+    }
 }
 ?>

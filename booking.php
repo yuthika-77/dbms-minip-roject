@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,15 +44,19 @@
             border: 1px solid #ccc;
         }
 
-        /* Styling for the total cost display */
-        .total-cost {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #007bff;
+        /* Button styling */
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        /* Button styling */
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -61,6 +64,7 @@
     <h1>GoOn Airline</h1>
     <p>The best journey starts with us...</p>
 </header>
+
 <?php
 session_start();
 require_once("connection.php");
@@ -74,12 +78,22 @@ if (!isset($_SESSION['username'])) {
 }
 
 if (isset($_POST['select'])) {
+    // Generate PNR code
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $pnr = substr(str_shuffle($characters), 0, 6);
-    // Get the price per passenger and calculate total cost
-    $cost = $_POST['Price'];
-    $total = $passengerCount * $cost;
+
+    // Get the flight ID 
     $F_id = $_POST['FlightID'];
+    
+    // Fetch the price based on the class (p_eco or p_bus)
+    $query = "SELECT p_eco, p_bus FROM flight WHERE F_no = '$F_id'";
+    $result = mysqli_query($con, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $flight = mysqli_fetch_assoc($result);
+        // Get the price for the selected class
+        $ecoPrice = $flight['p_eco'];
+        $busPrice = $flight['p_bus'];
+    }
 
     // Begin the form to collect passenger details
     echo '<form method="post" action="insert_passenger.php" onsubmit="return validateForm()">';
@@ -87,21 +101,24 @@ if (isset($_POST['select'])) {
     // Outer container to wrap everything (with proper styling)
     echo '<div class="login-container" id="outer">';
 
+    // Initialize total price to 0
+    $totalPrice = 0;
+
     // Loop through passenger count and display fields for each passenger within their own container
     for ($i = 1; $i <= $passengerCount; $i++) {
         echo '<div class="login-container">
                 <h3>Enter details for Passenger ' . $i . '</h3>
                 <div class="input-group">
                     <label for="fname' . $i . '">First Name:</label>
-                    <input type="text" id="fname' . $i . '" name="fname" placeholder="Enter first name" required>
+                    <input type="text" id="fname' . $i . '" name="fname[]" placeholder="Enter first name" required>
                 </div>
                 <div class="input-group">
                     <label for="lname' . $i . '">Last Name:</label>
-                    <input type="text" id="lname' . $i . '" name="lname" placeholder="Enter last name" required>
+                    <input type="text" id="lname' . $i . '" name="lname[]" placeholder="Enter last name" required>
                 </div>
                 <div class="input-group">
                     <label for="dob' . $i . '">Date of Birth:</label>
-                    <input type="date" id="dob' . $i . '" name="DOB" required required max="' . date('Y-m-d') . '">
+                    <input type="date" id="dob' . $i . '" name="DOB[]" required max="' . date('Y-m-d') . '">
                 </div>
                 <div class="input-group">
                     <label for="gender' . $i . '">Gender:</label>
@@ -115,6 +132,13 @@ if (isset($_POST['select'])) {
                 <div class="input-group">
                     <label for="passport_no' . $i . '">Passport Number:</label>
                     <input type="text" id="passport_no' . $i . '" name="passport_no[]" placeholder="Enter passport number" required>
+                </div>
+                <div class="input-group">
+                    <label for="class' . $i . '">Class:</label>
+                    <select id="class' . $i . '" name="class[]" onchange="updateTotalPrice()" required>
+                        <option value="economy">Economy</option>
+                        <option value="business">Business</option>
+                    </select>
                 </div>
               </div>';
     }
@@ -132,54 +156,22 @@ if (isset($_POST['select'])) {
             </div>
           </div>';
 
-    // Display the total cost for the booking
-    echo '<div id="total" class="total-cost">Total Cost: ' . htmlspecialchars($total) . ' USD</div>';
+    // Total price display
+    echo '<div class="input-group">
+            <label for="totalPrice">Total Price:</label>
+            <input type="hidden" id="totalPrice" name="totalPrice" value="0"  >
+          </div>';
 
-    // Hidden fields to pass Flight ID and Total cost for further processing
+    // Hidden fields to pass Flight ID, PNR, and total cost for further processing
     echo '<input type="hidden" value="' . htmlspecialchars($F_id) . '" name="FlightID">
-          <input type="hidden" value="' . htmlspecialchars($total) . '" name="totalCost">
           <input type="hidden" value="' . htmlspecialchars($pnr) . '" name="PNR">
-          <button type="submit" class="button" name="submit">Checkout</button>
+                    
+
+          <button type="submit" class="button" name="submit">Proceed to Checkout</button>
     </div>'; // Close outer-container
 
     // End of form
     echo '</form>';
-}
-
-// Server-side validation
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    // Loop through the passenger details
-    foreach ($_POST['fname'] as $index => $fname) {
-        $lname = $_POST['lname'][$index];
-        $dob = $_POST['DOB'][$index];
-        $gender = $_POST['gender'][$index];
-        $passport_no = $_POST['passport_no'][$index];
-
-        // Server-side validation
-        if (empty($fname) || empty($lname) || empty($dob) || empty($gender) || empty($passport_no)) {
-            die("All fields are required for passenger " . ($index + 1));
-        }
-
-        // Validate passport number (e.g., 6 to 9 alphanumeric characters)
-        if (!preg_match("/^[A-Za-z0-9]{6,9}$/", $passport_no)) {
-            die("Invalid passport number for passenger " . ($index + 1));
-        }
-
-        // Validate email format
-        $email = $_POST['email'][$index];
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            die("Invalid email format.");
-        }
-
-        // Validate phone number (e.g., 10 digits)
-        $phone = $_POST['phone'][$index];
-        if (!preg_match("/^\d{10}$/", $phone)) {
-            die("Invalid phone number format.");
-        }
-    }
-
-    // If validation passes, insert data into the database
-    // Your insertion logic goes here...
 }
 ?>
 
@@ -188,73 +180,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     <p>2024 Airline Reservation. All Rights Reserved.</p>
 </footer>
 
-<!-- JavaScript for validation -->
+<!-- JavaScript for validation and total price calculation -->
 <script>
-    // Function to validate the form before submitting
+    // Validation function
     function validateForm() {
-        // Get all form inputs
-        var form = document.querySelector("form");
-        var fname = form.querySelectorAll("input[name='fname[]']");
-        var lname = form.querySelectorAll("input[name='lname[]']");
-        var dob = form.querySelectorAll("input[name='DOB[]']");
-        var gender = form.querySelectorAll("select[name='gender[]']");
-        var passportNo = form.querySelectorAll("input[name='passport_no[]']");
-        var email = form.querySelector("input[name='email[]']");
-        var phone = form.querySelector("input[name='phone[]']");
-
-        // Validate each passenger's details
-        for (var i = 0; i < fname.length; i++) {
-            // Check if first name and last name are not empty
-            if (fname[i].value.trim() == "") {
-                alert("Please enter the first name for passenger " + (i + 1));
-                return false;
-            }
-            if (lname[i].value.trim() == "") {
-                alert("Please enter the last name for passenger " + (i + 1));
-                return false;
-            }
-
-            // Check if passport number matches a pattern (e.g., alphanumeric or numeric)
-            var passportPattern = /^[A-Za-z0-9]{6,9}$/;
-            if (!passportPattern.test(passportNo[i].value.trim())) {
-                alert("Please enter a valid passport number for passenger " + (i + 1));
-                return false;
-            }
-
-            // Check if date of birth is valid
-            if (dob[i].value.trim() == "") {
-                alert("Please enter the date of birth for passenger " + (i + 1));
-                return false;
-            }
-
-            // Check if gender is selected
-            if (gender[i].value == "none") {
-                alert("Please select the gender for passenger " + (i + 1));
+        const fnameFields = document.querySelectorAll('input[name="fname[]"]');
+        const lnameFields = document.querySelectorAll('input[name="lname[]"]');
+        const dobFields = document.querySelectorAll('input[name="DOB[]"]');
+        
+        for (let i = 0; i < fnameFields.length; i++) {
+            if (!fnameFields[i].value || !lnameFields[i].value || !dobFields[i].value) {
+                alert('Please fill out all fields for each passenger.');
                 return false;
             }
         }
-
-        // Validate contact details
-        if (email.value.trim() == "") {
-            alert("Please enter your email.");
-            return false;
-        }
-        if (!/\S+@\S+\.\S+/.test(email.value.trim())) {
-            alert("Please enter a valid email.");
-            return false;
-        }
-
-        if (phone.value.trim() == "") {
-            alert("Please enter your phone number.");
-            return false;
-        }
-        if (!/^\d{10}$/.test(phone.value.trim())) {
-            alert("Please enter a valid phone number (10 digits).");
-            return false;
-        }
-
-        // If everything is valid, allow the form to submit
         return true;
+    }
+
+    // Update total price based on class selection
+    function updateTotalPrice() {
+        // Prices for economy and business class
+        const ecoPrice = <?php echo $ecoPrice; ?>;
+        const busPrice = <?php echo $busPrice; ?>;
+
+        let totalPrice = 0;
+        
+        // Loop through each passenger and calculate the price
+        const classFields = document.querySelectorAll('select[name="class[]"]');
+        classFields.forEach(function(field) {
+            if (field.value === "economy") {
+                totalPrice += ecoPrice;
+            } else if (field.value === "business") {
+                totalPrice += busPrice;
+            }
+        });
+        
+        // Update the total price field
+        document.getElementById('totalPrice').value = totalPrice.toFixed(2);
     }
 </script>
 </body>

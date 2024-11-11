@@ -216,12 +216,7 @@ input[type="text"] {
                     <option value="5">5</option>
                 </select><br/><br/>
 
-                <label for="class">Class:</label>
-                <select id="class" name="class" required>
-                    <option value="none" selected>Select Class</option>
-                    <option value="economy">Economy</option>
-                    <option value="business">Business</option>
-                </select><br/><br/>
+               
 
                 <button type="submit">Search Flights</button>
             </form>

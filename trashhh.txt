@@ -48,3 +48,6 @@ else
     echo "form not submitted";
 }
 ?>
+
+
+                    <div class="details">

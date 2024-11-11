@@ -33,8 +33,12 @@ if (isset($_POST['submit_user']))
         else 
         { 
             // Check if the username, phone, or email already exists
-            $checkQuery = "SELECT * FROM user WHERE username = '$UserUsername' OR phone_number = '$UserPhone' OR Email='$Email' OR password='$UserPassword'";
+            $checkQuery = "SELECT * FROM user WHERE username = '$UserUsername' OR phone = '$UserPhone' OR email='$Email'";
             $checkResult = mysqli_query($con, $checkQuery);
+
+            if (!$checkResult) {
+                die("Query failed: " . mysqli_error($con)); // Debugging line
+            }
 
             if (mysqli_num_rows($checkResult) > 0) 
             { 
@@ -46,8 +50,8 @@ if (isset($_POST['submit_user']))
             else 
             {
                 // SQL query to insert the data into the users table
-                $query = "INSERT INTO user (Lname, Fname, username, age, password, gender, phone_number, Email) 
-                          VALUES ('$UserLast', '$UserFirst', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone', '$Email')";
+                $query = "INSERT INTO user (first_name, last_name, username, age, password, gender, phone, email) 
+                          VALUES ('$UserFirst', '$UserLast', '$UserUsername', '$UserAge', '$UserPassword', '$UserGender', '$UserPhone', '$Email')";
 
                 // Execute the query
                 $result = mysqli_query($con, $query);
