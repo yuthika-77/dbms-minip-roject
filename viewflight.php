@@ -104,6 +104,7 @@ $rowcount = mysqli_num_rows($result);
         </div>
     </center>
     <button onclick="window.location.href='AddFlight.html'">Add Flight</button>
+    <button onclick="window.location.href='admin.php'">Back to Dashboard</button>
 </div>
 <footer>
         <p>2024 Airline Reservation. All Rights Reserved.</p>
