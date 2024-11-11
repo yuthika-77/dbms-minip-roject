@@ -1,8 +1,7 @@
-
 <?php
 require_once("connection.php");
 session_start();
-
+ 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -14,25 +13,13 @@ if (!isset($_SESSION['username'])) {
 
 $name = $_SESSION['username']; // Username from session
 
-// Prepare query to fetch user ID from the 'user' table
-$query = "SELECT id FROM user WHERE username = ?";
-$stmt = $con->prepare($query);
-
-// Check if prepare() was successful
-if ($stmt === false) {
-    die('Error preparing statement (User ID fetch): ' . $con->error); // Debugging statement preparation error
-}
-
-// Bind parameter to the prepared statement
-$stmt->bind_param("s", $name);
-
-// Execute the statement and check if it works
-$stmt->execute();
-$res = $stmt->get_result(); // Get the result
+// Fetch user ID from the 'user' table
+$query = "SELECT id FROM user WHERE username = '$name'";
+$res = mysqli_query($con, $query);
 
 // Check if the user exists
-if ($res->num_rows > 0) {
-    $user = $res->fetch_assoc(); // Fetch user data
+if ($res && mysqli_num_rows($res) > 0) {
+    $user = mysqli_fetch_assoc($res); // Fetch user data
     $user_id = $user['id']; // Get the user_id
 } else {
     die("Error: User ID not found.");
@@ -44,33 +31,21 @@ $query = "
            f.Departure_time, f.From_location, f.To_location
     FROM booking b
     INNER JOIN flight f ON b.flight_id = f.F_id
-    WHERE b.user_id = ?";
-echo "SQL Query: $query";  // Output query for debugging
-$stmt = $con->prepare($query);
+    WHERE b.user_id = '$user_id'"; // Directly use the user_id in the query
 
-// Check if prepare() was successful
-if ($stmt === false) {
-    die('Error preparing statement (Booking and Flight details fetch): ' . $con->error); // Debugging statement preparation error
-}
-
-// Bind the user_id to the query
-$stmt->bind_param("i", $user_id);
-
-// Execute the statement and get the result
-$stmt->execute();
-$res = $stmt->get_result(); // Get the result
+$res = mysqli_query($con, $query); // Execute the query
 
 // Initialize the $bookings array
 $bookings = [];
 
 // Check if any bookings were found
-if ($res && $res->num_rows > 0) {
-    while ($booking = $res->fetch_assoc()) {
+if ($res && mysqli_num_rows($res) > 0) {
+    while ($booking = mysqli_fetch_assoc($res)) {
         $bookings[] = $booking;
     }
 } else {
-    echo '<script>alert("No bookings found."); window.location.href="user.php";</script>';
-    exit();
+    echo "No bookings found for this user."; // If no bookings exist
+    echo " MySQL error: " . mysqli_error($con); // Output error if something went wrong
 }
 
 ?>
@@ -153,7 +128,7 @@ if ($res && $res->num_rows > 0) {
     <?php endforeach; ?>
 
     <div class="btn-group">
-        <a href="index.php" class="btn">Back to Home</a>
+        <a href="user.php" class="btn">Back to Home</a>
     </div>
 </div>
 

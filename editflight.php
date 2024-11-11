@@ -13,7 +13,8 @@ if ($row = mysqli_fetch_assoc($result)) {
     $deptd = $row['Departure_date'];
     $dt = $row['Departure_time'];
     $at = $row['Arrival_time'];
-    $price = $row['Price']; // Price
+    $price_eco = $row['P_eco']; // Price
+    $price_bus = $row['P_bus']; // Price
 } else {
     // Handle case where no flight is found
     echo "<script>alert('Flight not available.');</script>";
@@ -58,8 +59,11 @@ if ($row = mysqli_fetch_assoc($result)) {
         <label for="arrival_time">Arrival Time:</label>
         <input type="time" id="arrival_time" name="arrival_time" value="<?php echo htmlspecialchars($at); ?>" required><br><br>
 
-        <label for="price">Base Price:</label>
-        <input type="text" id="price" name="price" value="<?php echo htmlspecialchars($price); ?>" required><br><br>
+        <label for="price">Economy Price:</label>
+        <input type="text" id="price" name="price" value="<?php echo htmlspecialchars($price_eco); ?>" required><br><br>
+
+        <label for="price">Business Price:</label>
+        <input type="text" id="price" name="price" value="<?php echo htmlspecialchars($price_bus); ?>" required><br><br>
 </div>
         <button type="submit" name="update">Update</button>
         <button type="reset" name="reset">Cancel</button>

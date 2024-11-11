@@ -120,7 +120,7 @@ input[type="text"] {
         <nav>
             <a href="user.html">Home</a>
             <a class="tablink"onclick="openModal('bookFlightModal')">Book a Flight</a>
-            <a class="tablink" onclick="openModal('manageFlightModal')">Manage Flight</a>
+           
             
             <a href="logout.php">Logout</a>
         </nav>
@@ -223,18 +223,8 @@ input[type="text"] {
         </div>
     </div>
 
-    <!-- Manage Flight Modal -->
-    <div id="manageFlightModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('manageFlightModal')">&times;</span>
-            <h2>Manage Your Flight</h2>
-            <p style="color:#aaa">Check your flight deatils,manage your trips and more</p>
-            <form action="confirmation.php" method="post" onsubmit="return validateFlight()">
-                <input type="text" name="PNR" placeholder="Booking Reference(PNR)" required>
-                <input type="text" name="lastName" placeholder="Last Name" required>
-                <button type="submit">Manage Flight</button>
-            </form>
-        </div>
+   
+   
     </div>
 
  

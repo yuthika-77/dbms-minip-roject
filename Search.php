@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Query to find flights matching the search criteria
     $check_query = "
-        SELECT F_no, p_eco, p_bus, Departure_time, Arrival_time, From_location, To_location 
+        SELECT F_no,F_id, p_eco, p_bus, Departure_time, Arrival_time, From_location, To_location 
         FROM flight 
         WHERE Departure_date = '$DepartureDate'
         AND From_location = '$FromLocation'
@@ -93,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $i = 0;
         while ($flight = mysqli_fetch_assoc($result)) {
             $i++;
-            $Fid = $flight['F_no'];
+            $Fid = $flight['F_id'];
+            $Fno = $flight['F_no'];
             $DepartureTime = $flight['Departure_time'];
             $ArrivalTime = $flight['Arrival_time'];
             $PriceEco = $flight['p_eco'];
@@ -124,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // If round-trip, show return flight
             if ($TripType === 'round-trip' && $ReturnDate) {
                 $return_query = "
-                    SELECT F_no, p_eco, p_bus, Departure_time, Arrival_time, From_location, To_location
+                    SELECT F_no,F_id, p_eco, p_bus, Departure_time, Arrival_time, From_location, To_location
                     FROM flight
                     WHERE Departure_date = '$ReturnDate'
                     AND From_location = '$ToLocation'
@@ -137,7 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($return_result && mysqli_num_rows($return_result) > 0) {
                     echo '<h3>Return Flight</h3>';
                     while ($return_flight = mysqli_fetch_assoc($return_result)) {
-                        $ReturnFid = $return_flight['F_no'];
+                        $ReturnFid = $return_flight['F_id'];
+                        $ReturnFno = $return_flight['F_no'];
                         $ReturnDepartureTime = $return_flight['Departure_time'];
                         $ReturnArrivalTime = $return_flight['Arrival_time'];
                         $ReturnPriceEco = $return_flight['p_eco'];

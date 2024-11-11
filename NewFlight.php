@@ -9,7 +9,8 @@ if (isset($_POST['submit'])) {
     $ArrivalTime = mysqli_real_escape_string($con, $_POST['arrival_time']);
     $DepartureTime = mysqli_real_escape_string($con, $_POST['departure_time']);
     $DepartureDate = mysqli_real_escape_string($con, $_POST['departure_date']);
-    $Price = mysqli_real_escape_string($con, $_POST['price']);
+    $Price_eco = mysqli_real_escape_string($con, $_POST['price_eco']);
+    $Price_bus = mysqli_real_escape_string($con, $_POST['price_bus']);
 
     // Check if the flight number already exists in the database
     $check_query = "SELECT * FROM flight WHERE F_no = '$FlightNo'";
@@ -25,8 +26,8 @@ if (isset($_POST['submit'])) {
     }
 
     // Insert query to add the flight details
-    $insert_query = "INSERT INTO flight (F_no, Departure_date, From_location, To_location, Arrival_time, Departure_time, Price)
-                     VALUES ('$FlightNo', '$DepartureDate', '$From', '$To', '$ArrivalTime', '$DepartureTime', '$Price')";
+    $insert_query = "INSERT INTO flight (F_no, Departure_date, From_location, To_location, Arrival_time, Departure_time, P_eco,P_bus)
+                     VALUES ('$FlightNo', '$DepartureDate', '$From', '$To', '$ArrivalTime', '$DepartureTime', '$Price_eco', '$Price_bus')";
 
     $insert_result = mysqli_query($con, $insert_query);
 

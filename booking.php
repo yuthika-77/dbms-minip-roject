@@ -1,41 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <title>GoOn Airline - Booking</title>
+    <style>
+        /* Outer login container for the entire form */
+        #outer {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 150%; /* Set the width to a larger size for outer container */
+        }
+
+        /* Inner login container for each passenger or details */
+        .login-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: auto; /* Inner container should be smaller */
+        }
+
+        /* Group input fields within each container */
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Button styling */
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>GoOn Airline</h1>
+    <p>The best journey starts with us...</p>
+</header>
+
 <?php
 session_start();
 require_once("connection.php");
 
-// Get the passenger count from the session
 $passengerCount = $_SESSION['passengerCount'];
 
 if (!isset($_SESSION['username'])) {
-    header("Location: index.html?login=user"); // Redirect to login page if not logged in
+    header("Location: index.html?login=user");
     exit;
 }
 
-// Handle the selection of flight and store the FlightID in the session
 if (isset($_POST['select'])) {
-    $F_id = $_POST['FlightID'];
-    $_SESSION['FlightID'] = $F_id; // Store FlightID in session
-
-    // Generate PNR code
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $pnr = substr(str_shuffle($characters), 0, 6);
 
-    // Fetch the price based on the class (p_eco or p_bus)
-    $query = "SELECT p_eco, p_bus FROM flight WHERE F_no = '$F_id'";
+    $F_id = $_POST['FlightID'];
+    $query = "SELECT P_eco, P_bus FROM flight WHERE F_id = '$F_id'";
     $result = mysqli_query($con, $query);
+    
     if ($result && mysqli_num_rows($result) > 0) {
         $flight = mysqli_fetch_assoc($result);
-        // Get the price for the selected class
-        $ecoPrice = $flight['p_eco'];
-        $busPrice = $flight['p_bus'];
+        $ecoPrice = $flight['P_eco'];
+        $busPrice = $flight['P_bus'];
+    } else {
+        // Set default prices if query fails
+        $ecoPrice = 0;
+        $busPrice = 0;
+        // Optionally, add error message here
+        echo "<p>Error: Unable to fetch flight details.</p>";
     }
 
     // Begin the form to collect passenger details
-    echo '<form method="post" action="insert_passenger.php" onsubmit="updateTotalPrice(); return validateForm()">'; // Call updateTotalPrice on submit
+    echo '<form method="post" action="insert_passenger.php" onsubmit="return validateForm()">';
 
     // Outer container to wrap everything (with proper styling)
     echo '<div class="login-container" id="outer">';
 
-    // Loop through passenger count and display fields for each passenger within their own container
+    // Initialize total price to 0
+    $totalPrice = 0;
+
+    // Loop through passenger count and display fields for each passenger
     for ($i = 1; $i <= $passengerCount; $i++) {
         echo '<div class="login-container">
                 <h3>Enter details for Passenger ' . $i . '</h3>
@@ -74,7 +144,7 @@ if (isset($_POST['select'])) {
               </div>';
     }
 
-    // Contact details section (below the passenger details)
+    // Contact details section
     echo '<div class="login-container">
             <h3>Enter Contact Details</h3>
             <div class="input-group">
@@ -87,21 +157,27 @@ if (isset($_POST['select'])) {
             </div>
           </div>';
 
-    // Total price display
-    echo '<div class="input-group">
+    // Hidden prices passed to JS
+    echo '<input type="hidden" id="ecoPrice" value="' . $ecoPrice . '">
+          <input type="hidden" id="busPrice" value="' . $busPrice . '">
+          
+          <div class="input-group">
             <label for="totalPrice">Total Price:</label>
-            <input type="text" id="totalPrice" name="totalPrice" value="0" readonly>
+            <input type="text" id="totalPrice" name="totalPrice" value="0.00" readonly>
           </div>';
 
-    // Proceed to checkout button
-    echo '<button type="submit" class="button" name="submit" id="submitBtn">Proceed to Checkout</button>';
-    
-    echo '</div>'; // Close outer-container
+    // Hidden fields for flight and PNR
+    echo '<input type="hidden" value="' . htmlspecialchars($F_id) . '" name="FlightID">
+          <input type="hidden" value="' . htmlspecialchars($pnr) . '" name="PNR">
+          
+          <button type="submit" class="button" name="submit">Proceed to Checkout</button>
+    </div>'; // Close outer-container
 
-    // End of form
     echo '</form>';
 }
 ?>
+
+
 
 <!-- Footer -->
 <footer>
@@ -126,26 +202,27 @@ if (isset($_POST['select'])) {
     }
 
     // Update total price based on class selection
-    function updateTotalPrice() {
-        // Prices for economy and business class
-        const ecoPrice = <?php echo $ecoPrice; ?>;
-        const busPrice = <?php echo $busPrice; ?>;
+function updateTotalPrice() {
+    // Get prices from hidden input fields
+    const ecoPrice = parseFloat(document.getElementById('ecoPrice').value);
+    const busPrice = parseFloat(document.getElementById('busPrice').value);
 
-        let totalPrice = 0;
-        
-        // Loop through each passenger and calculate the price
-        const classFields = document.querySelectorAll('select[name="class[]"]');
-        classFields.forEach(function(field) {
-            if (field.value === "economy") {
-                totalPrice += ecoPrice;
-            } else if (field.value === "business") {
-                totalPrice += busPrice;
-            }
-        });
-        
-        // Update the total price field
-        document.getElementById('totalPrice').value = totalPrice.toFixed(2);
-    }
+    let totalPrice = 0;
+
+    // Loop through each passenger's class selection
+    const classFields = document.querySelectorAll('select[name="class[]"]');
+    classFields.forEach(function(field) {
+        if (field.value === "economy") {
+            totalPrice += ecoPrice;
+        } else if (field.value === "business") {
+            totalPrice += busPrice;
+        }
+    });
+
+    // Update the total price field
+    document.getElementById('totalPrice').value = totalPrice.toFixed(2);
+}
+
 </script>
 </body>
-</html>
+</html>  

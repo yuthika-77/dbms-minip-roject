@@ -53,7 +53,8 @@ $rowcount = mysqli_num_rows($result);
                     <th>Departure Date</th>
                     <th>Departure Time</th>
                     <th>Arrival Time</th>
-                    <th>Price</th>
+                    <th>Price Economy</th>
+                    <th>Price Business</th>
                     <th>Actions</th>
                 </tr>
                 <?php
@@ -67,7 +68,8 @@ $rowcount = mysqli_num_rows($result);
                         $deptd = $row['Departure_date'];
                         $dt = $row['Departure_time'];
                         $at = $row['Arrival_time'];
-                        $price = $row['Price']; // Price
+                        $price_eco = $row['P_eco']; // Price
+                        $price_bus= $row['P_bus']; // Price
                         ?>
                         <tr>
                             <td><?php echo $serial++; ?></td>
@@ -78,7 +80,8 @@ $rowcount = mysqli_num_rows($result);
                             <td><?php echo $deptd; ?></td>
                             <td><?php echo $dt; ?></td>
                             <td><?php echo $at; ?></td>
-                            <td><?php echo $price; ?></td>
+                            <td><?php echo $price_eco; ?></td>
+                            <td><?php echo $price_bus; ?></td>
                             <td>
                                 <a href="editflight.php?GetID=<?php echo trim($id); ?>">Edit</a>
                                 <a href="deleteflight.php?Del=<?php echo trim($id); ?>">Delete</a>
