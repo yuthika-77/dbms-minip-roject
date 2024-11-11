@@ -131,26 +131,8 @@ if (!isset($_SESSION['submit']) !== true) {
                     <a href="viewflight.php">View Flight</a>
                 </div>
             </div>
-            <div class="dropdown">
-                <a href="#">Manage Bookings</a>
-                <div class="dropdown-content">
-                    <a href="viewbooking.php">View Reservations</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <a href="#">Manage Passengers</a>
-                <div class="dropdown-content">
-                    <a href="viewpassangers.php">View Passengers</a>
-                    <a href="viewuser.php">View Users</a>
-                </div>
-            </div>
-            <div class="dropdown">
-            <a href="#">Manage Seats</a>
-                <div class="dropdown-content">
-                    <a href="checkin.php">Check-in</a>
-                    <a href="viewseats.php">View Seats</a>
-                </div>
-            </div>
+            
+            
             <div class="dropdown">
             <a href="logout.php">Logout</a>
     </div>
@@ -178,33 +160,8 @@ if (!isset($_SESSION['submit']) !== true) {
                 <li><a href="viewflight.php">👀 View Flight</a></li>
             </ul>
         </li>
-        <li>
-            <a >
-                📅 Manage Bookings
-            </a>
-            <ul>
-                <li><a href="viewbooking.php">👓 View Reservation</a></li>
+        
             </ul>
-        </li>
-        <li>
-            <a >
-                👥 Manage Passengers
-            </a>
-            <ul>
-                <li><a href="viewpassangers.php">📋 View Passenger</a></li>
-                <li><a href="viewusers.php">📋 View Users</a></li>
-            </ul>
-        </li>
-        <li>
-            <!-- <a>
-                💺 Manage Seats
-            </a>
-            <ul>
-                <li><a href="checkin.php">🛂 Check-in</a></li>
-                <li><a href="viewseats.php">💺 View Seats</a></li>
-            </ul> -->
-        </li>
-    </ul>
 </div>
 
     </div>

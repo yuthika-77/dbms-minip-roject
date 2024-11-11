@@ -3,48 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Entry Form</title>
-    <link rel="stylesheet" type="text/css" href="flight.css">
+    <title>GoOn Airline - Add Flight</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+    <header>
+        <h1>GoOn Airline</h1>
+        <p>The best journey starts with us...</p>
+    </header>
 
+<div class="login-container" style="width:30%; margin:20px;">
+    <h2>Add Flight</h2>
+    <div class="login-container" style="width:auto; justify-items:left;">
+        <form id="addFlightForm" action="NewFlight.php" method="post" onsubmit="return validateForm()">
+            <label for="f_no">Flight Number:</label>
+            <input type="text" id="f_no" name="f_no" required><br><br>
 
-<form action="NewFlight.php" method="post">
-    <label for="trip_type">Trip Type:</label>
-    <select id="trip_type" name="trip_type" required>
-        <option value="oneway">One Way</option>
-        <option value="roundtrip">Round Trip</option>
-    </select><br><br>
+            <label for="departure_date">Departure Date:</label>
+            <input type="date" id="departure_date" name="departure_date" required><br><br>
 
-    <label for="f_no">Flight Number:</label>
-    <input type="text" id="f_no" name="f_no" required><br><br>
+            <label for="from_location">From Location:</label>
+            <input type="text" id="from_location" name="from_location" required><br><br>
 
-    <label for="arrival_date">Arrival Date:</label>
-    <input type="date" id="arrival_date" name="arrival_date" required><br><br>
+            <label for="to_location">To Location:</label>
+            <input type="text" id="to_location" name="to_location" required><br><br>
 
-    <label for="departure_date">Departure Date:</label>
-    <input type="date" id="departure_date" name="departure_date" required><br><br>
+            <label for="departure_time">Departure Time:</label>
+            <input type="time" id="departure_time" name="departure_time" required><br><br>
 
-    <label for="from_location">From Location:</label>
-    <input type="text" id="from_location" name="from_location" required><br><br>
+            <label for="arrival_time">Arrival Time:</label>
+            <input type="time" id="arrival_time" name="arrival_time" required><br><br>
 
-    <label for="to_location">To Location:</label>
-    <input type="text" id="to_location" name="to_location" required><br><br>
+            <label for="price">Base Price:</label>
+            <input type="text" id="price" name="price" required><br><br>
+        </div>
+        <button type="submit" name="submit" class="button">Add Flight</button>
+        <button onclick="window.location.href='admin.php'">Back to Dashboard</button>
+    </form>
+</div>
 
-    <label for="arrival_time">Arrival Time:</label>
-    <input type="time" id="arrival_time" name="arrival_time" required><br><br>
+<footer>
+    <p>2024 Airline Reservation. All Rights Reserved.</p>
+</footer>
 
-    <label for="ReturnDate">Return Date:</label>
-    <input type="time"   name="return" ><br><br>
+<script>
+    // Set minimum departure date to 7 days from today
+    window.onload = function() {
+        const today = new Date();
+        today.setDate(today.getDate() + 7); // 7 days from today
+        const minDate = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        document.getElementById("departure_date").setAttribute("min", minDate);
+    };
 
-    <label for="departure_time">Departure Time:</label>
-    <input type="time" id="departure_time" name="departure_time" required><br><br>
+    function validateForm() {
+        const flightNumber = document.getElementById("f_no").value;
+        const departureDate = document.getElementById("departure_date").value;
+        const fromLocation = document.getElementById("from_location").value;
+        const toLocation = document.getElementById("to_location").value;
+        const arrivalTime = document.getElementById("arrival_time").value;
+        const departureTime = document.getElementById("departure_time").value;
+        const price = document.getElementById("price").value;
 
-    <label for="BasePrice">Base Price:</label>
-    <input type="number" id="price" name="price" required><br><br>
+        // Flight number validation (2 letters followed by 3 numbers)
+        const flightNumberPattern = /^[A-Za-z]{2}\d{3}$/;
+        if (!flightNumberPattern.test(flightNumber)) {
+            alert("Flight number must have 2 letters followed by 3 numbers (e.g., AB123).");
+            document.getElementById("addFlightForm").reset(); // Reset form inputs
+            return false;
+        }
 
-    <button type="submit" name="submit" >Add Flight</button>
-</form>
+        // Ensure arrival time is at least 30 minutes after departure time if on the same day
+        if (departureTime && arrivalTime && departureDate) {
+            const departureDateTime = new Date(departureDate + "T" + departureTime);
+            const arrivalDateTime = new Date(departureDate + "T" + arrivalTime);
+            const timeDifference = (arrivalDateTime - departureDateTime) / (1000 * 60); // difference in minutes
+
+            if (timeDifference < 30) {
+                alert("Arrival time must be at least 30 minutes after the departure time.");
+                document.getElementById("addFlightForm").reset(); // Reset form inputs
+                return false;
+            }
+        }
+
+        // Location validation (letters, spaces, hyphens only, at least 3 and at most 20 characters)
+        const locationPattern = /^[A-Za-z\s\-]+$/;
+        if (!locationPattern.test(fromLocation) || fromLocation.length < 3 || fromLocation.length > 20) {
+            alert("From Location can only contain letters, spaces, hyphens, and must be between 3 and 20 characters long.");
+            document.getElementById("addFlightForm").reset(); // Reset form inputs
+            return false;
+        }
+        if (!locationPattern.test(toLocation) || toLocation.length < 3 || toLocation.length > 20) {
+            alert("To Location can only contain letters, spaces, hyphens, and must be between 3 and 20 characters long.");
+            document.getElementById("addFlightForm").reset(); // Reset form inputs
+            return false;
+        }
+
+        // Ensure locations are not the same
+        if (fromLocation.toLowerCase() === toLocation.toLowerCase()) {
+            alert("From Location and To Location cannot be the same.");
+            document.getElementById("addFlightForm").reset(); // Reset form inputs
+            return false;
+        }
+
+        // Price validation (between 100 and 10,000)
+        if (price === "" || isNaN(price) || price < 100 || price > 10000) {
+            alert("Price must be between $100 and $10,000.");
+            document.getElementById("addFlightForm").reset(); // Reset form inputs
+            return false;
+        }
+
+        // Confirmation prompt with flight number
+        if (!confirm('Are you sure you want to submit these details?\nFlight Number: ' + flightNumber + '\nDeparture Date: ' + departureDate + '\nFrom location: ' + fromLocation + '\nTo location: ' + toLocation + '\nDeparture time : ' + departureTime + '\nArrival Time: ' + arrivalTime + '\nBase Price: ' + price)) {
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 </body>
 </html>
