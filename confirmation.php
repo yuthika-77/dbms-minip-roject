@@ -116,7 +116,7 @@ if ($res && mysqli_num_rows($res) > 0) {
         <div class="details">
             <h2>Booking Details</h2>
             <p><strong>Booking ID:</strong> <?php echo htmlspecialchars($booking['booking_id']); ?></p>
-            <p><strong>PNR Number:</strong> <?php echo htmlspecialchars($booking['pnr_number']); ?></p>
+             
             <p><strong>Departure Time:</strong> <?php echo htmlspecialchars($booking['Departure_time']); ?></p>
             <p><strong>From Location:</strong> <?php echo htmlspecialchars($booking['From_location']); ?></p>
             <p><strong>To Location:</strong> <?php echo htmlspecialchars($booking['To_location']); ?></p>
